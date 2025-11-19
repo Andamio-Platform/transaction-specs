@@ -1,0 +1,474 @@
+openapi: '3.0.3'
+info:
+  title: Andamio Transactions API
+  version: '2.0'
+servers:
+  - url: http://localhost:8000/v2
+paths:
+  # /mint-access-token:
+  #   get:
+  #     tags:
+  #       - user
+  #     description: 'Mint an access token for the user to join Andamio.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /migrate-to-access-token-v2:
+  #   get:
+  #     tags:
+  #       - migration
+  #     description: 'Migrate to access token V2.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  /admin/course/create:
+    get:
+      tags:
+        - course
+      description: 'Create a course.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of owner'
+          required: true
+          schema:
+            type: string
+        - name: managers
+          in: query
+          description: 'List of manager Access Token Aliases'
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: addresses
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /student/course/enroll:
+    get:
+      tags:
+        - course
+      description: 'Join a course.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Student'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: assignmentId
+          in: query
+          description: 'Assignment ID'
+          required: false
+          schema:
+            type: string
+        - name: content
+          in: query
+          description: 'Assignment Content Hash'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /teacher/course/modules/create:
+    post:
+      tags:
+        - course
+      description: 'Create modules.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Manager'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  slts:
+                    type: array
+                    description: 'List of Student Learning Targets'
+                    items:
+                      type: string
+                      description: slt
+                      # properties:
+                      #   slt:
+                      #     type: string
+                      #     description: 'Student Learning Target'
+                      #   content:
+                      #     type: string
+                      #     description: 'SLT content'
+                  # assignment:
+                  #   type: string
+                  #   description: 'Assignment description for the module'
+            example:
+              - slts:
+                  - 'I can test 1'
+                  - 'I can test 2'
+                  # - slt: 'I can test 1'
+                  #   content: 'content test1'
+                  # - slt: 'I can test 2'
+                  #   content: 'content test2'
+                # assignment: 'Complete the introduction assignment'
+              - slts:
+                  - 'I can implement'
+                  # - slt: 'I can implement'
+                  #   content: 'implementation content'
+                # assignment: 'Build a project'
+      responses:
+        '200':
+          description: OK
+  /student/course/assignment/submit:
+    get:
+      tags:
+        - course
+      description: 'Submit assignment.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Student'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: assignmentId
+          in: query
+          description: 'Assignment ID'
+          required: true
+          schema:
+            type: string
+        - name: content
+          in: query
+          description: 'Assignment Content Hash'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /teacher/course/assignment/assess:
+    get:
+      tags:
+        - course
+      description: 'Assess an assignment.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Manager'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: assignmentId
+          in: query
+          description: 'Assignment ID'
+          required: true
+          schema:
+            type: string
+        - name: studentAlias
+          in: query
+          description: 'Student Alias'
+          required: true
+          schema:
+            type: string
+        - name: assessment
+          in: query
+          description: 'Assessment Result'
+          required: true
+          schema:
+            type: string
+            enum:
+              - accept
+              - refuse
+      responses:
+        '200':
+          description: OK
+  /teacher/course/assignments/assess:
+    get:
+      tags:
+        - course
+      description: 'Assess an assignment.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Teachers'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: assignmentId
+          in: query
+          description: 'Assignment ID'
+          required: true
+          schema:
+            type: string
+        - name: studentAlias
+          in: query
+          description: 'Student Alias'
+          required: true
+          schema:
+            type: string
+        - name: assessment
+          in: query
+          description: 'Assessment Result'
+          required: true
+          schema:
+            type: string
+            enum:
+              - accept
+              - refuse
+      responses:
+        '200':
+          description: OK
+  # /student/course/assignment/withdraw:
+  #   get:
+  #     tags:
+  #       - course
+  #     description: 'Withdraw an assignment.'
+  #     parameters:
+  #       - name: alias
+  #         in: query
+  #         description: 'Access Token Alias of Student'
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: courseId
+  #         in: query
+  #         description: 'Course ID'
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: assignmentId
+  #         in: query
+  #         description: 'Assignment ID'
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: OK
+  /student/course/assignment/update:
+    get:
+      tags:
+        - course
+      description: 'Update an assignment.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Student'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: assignmentId
+          in: query
+          description: 'Assignment ID'
+          required: false
+          schema:
+            type: string
+        - name: content
+          in: query
+          description: 'Assignment Content Hash'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /student/course/creadential/claim:
+    get:
+      tags:
+        - course
+      description: 'Complete a course.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Student'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /admin/course/teachers/update:
+    get:
+      tags:
+        - course
+      description: 'Update course managers.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of owner'
+          required: true
+          schema:
+            type: string
+        - name: add
+          in: query
+          description: 'List of manager Access Token Aliases'
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: remove
+          in: query
+          description: 'List of manager Access Token Aliases'
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+  /admin/project/create:
+    get:
+      tags:
+        - project
+      description: 'Initialize a project (1 & 2).'
+      parameters: []
+      responses:
+        '200':
+          description: OK
+  # /contributor/join-project:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Join a project.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /owner/create-tasks:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Create tasks.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /owner/update-project-managers:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Update project managers.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /contributor/commit-to-task:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Commit to a task.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /manager/assess-evidence:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Assess evidence.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /contributor/update-contribution-evidence:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Update contribution evidence.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /contributor/uncommit-task:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Uncommit a task.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /contributor/collect-rewards:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Collect rewards.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
+  # /contributor/leave-project:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Leave a project.'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
