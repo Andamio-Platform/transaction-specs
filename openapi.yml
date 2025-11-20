@@ -31,13 +31,13 @@ paths:
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of owner'
+          description: 'Access Token Alias of course owner'
           required: true
           schema:
             type: string
-        - name: managers
+        - name: teachers
           in: query
-          description: 'List of manager Access Token Aliases'
+          description: 'List of teacher Access Token Aliases'
           required: true
           schema:
             type: array
@@ -45,7 +45,7 @@ paths:
               type: string
         - name: addresses
           in: query
-          description: ''
+          description: 'Used addresses for multi address cardano wallets'
           required: false
           schema:
             type: array
@@ -53,7 +53,7 @@ paths:
               type: string
         - name: changeAddress
           in: query
-          description: ''
+          description: 'Change address for multi address cardano wallets'
           required: false
           schema:
             type: string
@@ -80,13 +80,27 @@ paths:
             type: string
         - name: assignmentId
           in: query
-          description: 'Assignment ID'
+          description: 'Assignment ID for first assignment submission'
           required: false
           schema:
             type: string
         - name: content
           in: query
-          description: 'Assignment Content Hash'
+          description: 'Assignment Content Hash for first assignment submission'
+          required: false
+          schema:
+            type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
           required: false
           schema:
             type: string
@@ -101,7 +115,7 @@ paths:
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Manager'
+          description: 'Access Token Alias of Teacher'
           required: true
           schema:
             type: string
@@ -109,6 +123,20 @@ paths:
           in: query
           description: 'Course ID'
           required: true
+          schema:
+            type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
           schema:
             type: string
       requestBody:
@@ -126,30 +154,12 @@ paths:
                     items:
                       type: string
                       description: slt
-                      # properties:
-                      #   slt:
-                      #     type: string
-                      #     description: 'Student Learning Target'
-                      #   content:
-                      #     type: string
-                      #     description: 'SLT content'
-                  # assignment:
-                  #   type: string
-                  #   description: 'Assignment description for the module'
             example:
               - slts:
                   - 'I can test 1'
                   - 'I can test 2'
-                  # - slt: 'I can test 1'
-                  #   content: 'content test1'
-                  # - slt: 'I can test 2'
-                  #   content: 'content test2'
-                # assignment: 'Complete the introduction assignment'
               - slts:
                   - 'I can implement'
-                  # - slt: 'I can implement'
-                  #   content: 'implementation content'
-                # assignment: 'Build a project'
       responses:
         '200':
           description: OK
@@ -183,6 +193,20 @@ paths:
           required: true
           schema:
             type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -194,19 +218,13 @@ paths:
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Manager'
+          description: 'Access Token Alias of Teacher'
           required: true
           schema:
             type: string
         - name: courseId
           in: query
           description: 'Course ID'
-          required: true
-          schema:
-            type: string
-        - name: assignmentId
-          in: query
-          description: 'Assignment ID'
           required: true
           schema:
             type: string
@@ -225,18 +243,32 @@ paths:
             enum:
               - accept
               - refuse
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
   /teacher/course/assignments/assess:
-    get:
+    post:
       tags:
         - course
-      description: 'Assess an assignment.'
+      description: 'Assess multiple assignments.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Teachers'
+          description: 'Access Token Alias of Teacher'
           required: true
           schema:
             type: string
@@ -246,57 +278,46 @@ paths:
           required: true
           schema:
             type: string
-        - name: assignmentId
+        - name: addresses
           in: query
-          description: 'Assignment ID'
-          required: true
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
           schema:
             type: string
-        - name: studentAlias
-          in: query
-          description: 'Student Alias'
-          required: true
-          schema:
-            type: string
-        - name: assessment
-          in: query
-          description: 'Assessment Result'
-          required: true
-          schema:
-            type: string
-            enum:
-              - accept
-              - refuse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  studentAlias:
+                    type: string
+                    description: 'Student Alias'
+                  assessment:
+                    type: string
+                    description: 'Assessment Result'
+                    enum:
+                      - accept
+                      - refuse
+            example:
+              - studentAlias: 'student-1'
+                assessment: 'accept'
+              - studentAlias: 'student-2'
+                assessment: 'refuse'
       responses:
         '200':
           description: OK
-  # /student/course/assignment/withdraw:
-  #   get:
-  #     tags:
-  #       - course
-  #     description: 'Withdraw an assignment.'
-  #     parameters:
-  #       - name: alias
-  #         in: query
-  #         description: 'Access Token Alias of Student'
-  #         required: true
-  #         schema:
-  #           type: string
-  #       - name: courseId
-  #         in: query
-  #         description: 'Course ID'
-  #         required: true
-  #         schema:
-  #           type: string
-  #       - name: assignmentId
-  #         in: query
-  #         description: 'Assignment ID'
-  #         required: true
-  #         schema:
-  #           type: string
-  #     responses:
-  #       '200':
-  #         description: OK
   /student/course/assignment/update:
     get:
       tags:
@@ -317,7 +338,7 @@ paths:
             type: string
         - name: assignmentId
           in: query
-          description: 'Assignment ID'
+          description: 'New Assignment ID (Withdraw current assignment)'
           required: false
           schema:
             type: string
@@ -325,6 +346,20 @@ paths:
           in: query
           description: 'Assignment Content Hash'
           required: true
+          schema:
+            type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
           schema:
             type: string
       responses:
@@ -348,6 +383,20 @@ paths:
           required: true
           schema:
             type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -355,11 +404,11 @@ paths:
     get:
       tags:
         - course
-      description: 'Update course managers.'
+      description: 'Update course teachers.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of owner'
+          description: 'Access Token Alias of course admin'
           required: true
           schema:
             type: string
@@ -379,18 +428,32 @@ paths:
             type: array
             items:
               type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
-  /admin/project/create:
-    get:
-      tags:
-        - project
-      description: 'Initialize a project (1 & 2).'
-      parameters: []
-      responses:
-        '200':
-          description: OK
+  # /admin/project/create:
+  #   get:
+  #     tags:
+  #       - project
+  #     description: 'Initialize a project (1 & 2).'
+  #     parameters: []
+  #     responses:
+  #       '200':
+  #         description: OK
   # /contributor/join-project:
   #   get:
   #     tags:
