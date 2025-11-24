@@ -1,9 +1,74 @@
 openapi: '3.0.3'
 info:
   title: Andamio Transactions API
-  version: '2.0'
+  version: '2.0.0'
+  description: 'API for managing Andamio course transactions on Cardano'
 servers:
   - url: http://localhost:8000/v2
+components:
+  parameters:
+    addressesParam:
+      name: addresses
+      in: query
+      description: 'Used addresses for multi-address Cardano wallets (optional for single-address wallets)'
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    changeAddressParam:
+      name: changeAddress
+      in: query
+      description: 'Change address for multi-address Cardano wallets (required when addresses is provided)'
+      required: false
+      schema:
+        type: string
+  schemas:
+    ModuleItem:
+      type: object
+      required:
+        - slts
+      properties:
+        slts:
+          type: array
+          description: 'List of Student Learning Targets'
+          items:
+            type: string
+            minLength: 1
+        prerequisites:
+          type: array
+          description: 'List of prerequisite assignment hashes'
+          items:
+            type: string
+    ModuleUpdate:
+      type: object
+      required:
+        - sltHash
+      properties:
+        sltHash:
+          type: string
+          description: 'Hash of the Student Learning Target to update'
+        prerequisites:
+          type: array
+          description: 'List of prerequisite assignment hashes'
+          items:
+            type: string
+    AssessmentItem:
+      type: object
+      required:
+        - studentAlias
+        - assessment
+      properties:
+        studentAlias:
+          type: string
+          description: 'Student Access Token Alias'
+          minLength: 1
+        assessment:
+          type: string
+          description: 'Assessment decision'
+          enum:
+            - accept
+            - refuse
 paths:
   # /mint-access-token:
   #   get:
@@ -111,7 +176,7 @@ paths:
     post:
       tags:
         - course
-      description: 'Create modules.'
+      description: 'Create new course modules with Student Learning Targets and prerequisites.'
       parameters:
         - name: alias
           in: query
@@ -119,50 +184,30 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 1
         - name: courseId
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+            minLength: 1
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - modules
               properties:
                 modules:
                   type: array
                   description: 'Modules to be created'
                   items:
-                    type: object
-                    properties:
-                      slts:
-                        type: array
-                        description: 'List of Student Learning Targets'
-                        items:
-                          type: string
-                          description: slt
-                      prerequisites:
-                        type: array
-                        description: 'List of prerequisite assignment hashes'
-                        items:
-                          type: string
+                    $ref: '#/components/schemas/ModuleItem'
             example:
               modules:
                 - slts:
@@ -180,7 +225,7 @@ paths:
     post:
       tags:
         - course
-      description: 'Create modules.'
+      description: 'Create, update, or delete course modules in batch.'
       parameters:
         - name: alias
           in: query
@@ -188,26 +233,16 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 1
         - name: courseId
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+            minLength: 1
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       requestBody:
         required: true
         content:
@@ -219,36 +254,15 @@ paths:
                   type: array
                   description: 'Modules to be created'
                   items:
-                    type: object
-                    properties:
-                      slts:
-                        type: array
-                        description: 'List of Student Learning Targets'
-                        items:
-                          type: string
-                          description: slt
-                      prerequisites:
-                        type: array
-                        description: 'List of prerequisite assignment hashes'
-                        items:
-                          type: string
+                    $ref: '#/components/schemas/ModuleItem'
                 update:
                   type: array
                   description: 'Modules to be updated'
                   items:
-                    type: object
-                    properties:
-                      sltHash:
-                        type: string
-                        description: 'Hash of the Student Learning Target to update'
-                      prerequisites:
-                        type: array
-                        description: 'List of prerequisite assignment hashes'
-                        items:
-                          type: string
+                    $ref: '#/components/schemas/ModuleUpdate'
                 delete:
                   type: array
-                  description: 'Modules to be deleted'
+                  description: 'Modules to be deleted (module hashes)'
                   items:
                     type: string
                     description: 'Hash of the Student Learning Target to delete'
@@ -372,7 +386,7 @@ paths:
     post:
       tags:
         - course
-      description: 'Assess multiple assignments.'
+      description: 'Assess multiple student assignments in batch (accept or refuse).'
       parameters:
         - name: alias
           in: query
@@ -380,49 +394,36 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 1
         - name: courseId
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+            minLength: 1
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  studentAlias:
-                    type: string
-                    description: 'Student Alias'
-                  assessment:
-                    type: string
-                    description: 'Assessment Result'
-                    enum:
-                      - accept
-                      - refuse
+              type: object
+              required:
+                - assessments
+              properties:
+                assessments:
+                  type: array
+                  description: 'List of assessments to process'
+                  items:
+                    $ref: '#/components/schemas/AssessmentItem'
             example:
-              - studentAlias: 'student-1'
-                assessment: 'accept'
-              - studentAlias: 'student-2'
-                assessment: 'refuse'
+              assessments:
+                - studentAlias: 'student-1'
+                  assessment: 'accept'
+                - studentAlias: 'student-2'
+                  assessment: 'refuse'
       responses:
         '200':
           description: OK

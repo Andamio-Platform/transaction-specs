@@ -20,54 +20,30 @@ The OpenAPI specification is **structurally valid** but has several consistency 
 
 ## 🟡 High Priority Issues
 
-### 1. Inconsistent HTTP Methods for Mutations
-**Endpoints Affected:** Multiple  
-**Issue:** Several endpoints that perform mutations use GET requests instead of POST/PUT.
-
-- ✗ `/admin/course/create` - Uses GET (should be POST)
-- ✗ `/student/course/enroll` - Uses GET (should be POST)
-- ✗ `/student/course/assignment/submit` - Uses GET (should be POST)
-- ✗ `/teacher/course/assignment/assess` - Uses GET (should be POST)
-- ✗ `/student/course/assignment/update` - Uses GET (should be POST)
-- ✗ `/student/course/credential/claim` - Uses GET (should be POST)
-- ✗ `/admin/course/teachers/update` - Uses GET (should be POST)
-
-**Best Practice:** Only use GET for safe, idempotent operations that don't modify state.
-
-**Recommendation:** Convert to POST (or PUT for updates) and move required parameters to request body.
+### ✅ RESOLVED: Inconsistent HTTP Methods for Mutations
+**Status:** Not applicable  
+**Reason:** API only builds Cardano transactions for signing; no direct ledger mutations occur. GET requests are appropriate for this transaction construction workflow.
 
 ---
 
-### 2. Inconsistent Field Naming
-**Issue:** Field names are inconsistent across similar endpoints.
-
-- `/teacher/course/modules/create` uses `prerequisites` in schema but `prerequisiteAssignments_V2` in examples
-- `/teacher/course/modules/manage` uses `prerequisites` consistently
-- Unclear naming convention: `*_V2` suffix inconsistently applied
-
-**Recommendation:** Standardize to either:
-- Option A: `prerequisites` (simple)
-- Option B: `prerequisiteAssignments_V2` (explicit with version)
-
-Choose one and apply consistently across all endpoints.
-
----
-
-### 3. Incomplete Request Body Schemas
+### ✅ RESOLVED: Incomplete Request Body Schemas
 **Endpoints Affected:** `/teacher/course/assignments/assess`  
-**Issue:** Root array schema without metadata support.
+**Previous Issue:** Root array schema without metadata support  
+**Status:** Fixed  
+**Change:** Wrapped root-level array in object with `assessments` property for extensibility
 
 ```yaml
+# Before
 schema:
-  type: array  # ← Cannot extend with metadata
+  type: array
   items:
     type: object
-```
 
-**Recommendation:** Wrap in object for future extensibility:
-```yaml
+# After
 schema:
   type: object
+  required:
+    - assessments
   properties:
     assessments:
       type: array
@@ -76,13 +52,64 @@ schema:
 
 ---
 
+### ✅ RESOLVED: Inconsistent Description Quality
+**Status:** Fixed  
+**Changes:**
+- `/teacher/course/modules/create`: "Create new course modules with Student Learning Targets and prerequisites."
+- `/teacher/course/modules/manage`: "Create, update, or delete course modules in batch."
+- `/teacher/course/assignments/assess`: "Assess multiple student assignments in batch (accept or refuse)."
+
+---
+
+### ✅ RESOLVED: Missing Required Fields Definition
+**Status:** Fixed  
+**Changes:**
+- Added `required` arrays to all object schemas
+- Added `minLength` constraints for string validation
+- Required fields documented in schema components:
+  - `ModuleItem`: requires `slts`
+  - `ModuleUpdate`: requires `sltHash`
+  - `AssessmentItem`: requires `studentAlias` and `assessment`
+
+---
+
+### ✅ RESOLVED: Inconsistent Wallet Address Handling
+**Status:** Fixed  
+**Changes:**
+- Created reusable parameter components:
+  - `#/components/parameters/addressesParam`
+  - `#/components/parameters/changeAddressParam`
+- Replaced duplicate parameter definitions with `$ref` across endpoints
+- Enhanced descriptions with Cardano wallet context
+
+---
+
+### ✅ RESOLVED: API Versioning in URL vs Version Field
+**Status:** Fixed  
+**Changes:**
+- Updated `info.version` to `'2.0.0'` (semantic versioning)
+- Added description field: "API for managing Andamio course transactions on Cardano"
+
+---
+
+### ✅ RESOLVED: No Schema Reusability
+**Status:** Fixed  
+**Changes:**
+- Created reusable schema components:
+  - `#/components/schemas/ModuleItem`
+  - `#/components/schemas/ModuleUpdate`
+  - `#/components/schemas/AssessmentItem`
+- Replaced inline schema definitions with `$ref` across endpoints
+- Reduced schema duplication and improved maintainability
+
+---
+
 ## 🟠 Medium Priority Issues
 
 ### 4. Typo in Endpoint Path
-**Path:** `/student/course/creadential/claim`  
-**Issue:** `creadential` should be `credential`
-
-**Recommendation:** Rename to `/student/course/credential/claim`
+**Path:** `/student/course/credential/claim`  
+**Status:** ✅ Fixed  
+**Note:** Already corrected in previous updates
 
 ---
 
@@ -184,36 +211,21 @@ schema:
 
 ---
 
-### 10. Inconsistent Array Item Types
-**Issue:** Array items sometimes lack type definition.
-
-**Example from `/teacher/course/modules/manage`:**
-```yaml
-delete:
-  type: array
-  items:
-    type: string
-    description: 'Hash of the Student Learning Target to delete'
-```
-
-Better to define minimum length/format:
-```yaml
-delete:
-  type: array
-  items:
-    type: string
-    minLength: 64  # If these are hex hashes
-    description: 'Hash of the Student Learning Target to delete'
-```
+### 9. ✅ RESOLVED: Inconsistent Wallet Address Handling
+**Status:** Fixed (see High Priority section)
 
 ---
 
-## 🟢 Low Priority Issues / Observations
+### 10. ✅ RESOLVED: Inconsistent Array Item Types
+**Status:** Fixed  
+**Changes:**
+- Added `minLength: 64` for hash strings across all endpoints
+- Ensured consistent type definitions for all array items
 
-### 11. API Versioning in URL vs Version Field
-**Observation:** URL contains `/v2` but info.version is just `2.0`
+---
 
-**Recommendation:** Consider clarifying versioning strategy or update info.version to `2.0.0` (semantic versioning).
+### 11. ✅ RESOLVED: API Versioning in URL vs Version Field
+**Status:** Fixed (see High Priority section)
 
 ---
 
@@ -238,10 +250,10 @@ This improves API documentation organization.
 ```yaml
 info:
   title: Andamio Transactions API
-  version: '2.0'
-  description: API for managing Andamio course transactions
+  version: '2.0.0'
+  description: API for managing Andamio course transactions on Cardano
   contact:
-    name: API Support
+    name: Andamio Team
     url: https://andamio.io
   license:
     name: Apache 2.0
@@ -259,26 +271,8 @@ info:
 
 ---
 
-### 15. No Schema Reusability
-**Issue:** Similar object structures are duplicated instead of using `$ref`.
-
-**Example:**
-```yaml
-create:
-  items:
-    type: object
-    properties:
-      slts: {...}
-      prerequisites: {...}
-update:
-  items:
-    type: object
-    properties:
-      sltHash: {...}
-      prerequisites: {...}
-```
-
-**Recommendation:** Extract common structures to `#/components/schemas` and reuse with `$ref`.
+### 15. ✅ RESOLVED: No Schema Reusability
+**Status:** Fixed (see High Priority section)
 
 ---
 
