@@ -144,22 +144,130 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  slts:
-                    type: array
-                    description: 'List of Student Learning Targets'
-                    items:
-                      type: string
-                      description: slt
+              type: object
+              properties:
+                modules:
+                  type: array
+                  description: 'Modules to be created'
+                  items:
+                    type: object
+                    properties:
+                      slts:
+                        type: array
+                        description: 'List of Student Learning Targets'
+                        items:
+                          type: string
+                          description: slt
+                      prerequisites:
+                        type: array
+                        description: 'List of prerequisite assignment hashes'
+                        items:
+                          type: string
             example:
-              - slts:
-                  - 'I can test 1'
-                  - 'I can test 2'
-              - slts:
-                  - 'I can implement'
+              modules:
+                - slts:
+                    - 'I can test 1'
+                    - 'I can test 2'
+                  prerequisites:
+                    - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
+                - slts:
+                    - 'I can implement'
+                  prerequisites: []
+      responses:
+        '200':
+          description: OK
+  /teacher/course/modules/manage:
+    post:
+      tags:
+        - course
+      description: 'Create modules.'
+      parameters:
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Teacher'
+          required: true
+          schema:
+            type: string
+        - name: courseId
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+        - name: addresses
+          in: query
+          description: 'Used addresses for multi address cardano wallets'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: changeAddress
+          in: query
+          description: 'Change address for multi address cardano wallets'
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                create:
+                  type: array
+                  description: 'Modules to be created'
+                  items:
+                    type: object
+                    properties:
+                      slts:
+                        type: array
+                        description: 'List of Student Learning Targets'
+                        items:
+                          type: string
+                          description: slt
+                      prerequisites:
+                        type: array
+                        description: 'List of prerequisite assignment hashes'
+                        items:
+                          type: string
+                update:
+                  type: array
+                  description: 'Modules to be updated'
+                  items:
+                    type: object
+                    properties:
+                      sltHash:
+                        type: string
+                        description: 'Hash of the Student Learning Target to update'
+                      prerequisites:
+                        type: array
+                        description: 'List of prerequisite assignment hashes'
+                        items:
+                          type: string
+                delete:
+                  type: array
+                  description: 'Modules to be deleted'
+                  items:
+                    type: string
+                    description: 'Hash of the Student Learning Target to delete'
+            example:
+              create:
+                - slts:
+                    - 'I can test 1'
+                    - 'I can test 2'
+                  prerequisites:
+                    - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
+                - slts:
+                    - 'I can implement'
+                  prerequisites: []
+              update:
+                - sltHash: 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
+                  prerequisites:
+                    - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
+              delete:
+                - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
       responses:
         '200':
           description: OK
@@ -365,7 +473,7 @@ paths:
       responses:
         '200':
           description: OK
-  /student/course/creadential/claim:
+  /student/course/credential/claim:
     get:
       tags:
         - course
