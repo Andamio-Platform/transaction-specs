@@ -7,18 +7,30 @@ import (
 )
 
 func AdminCourseCreate(tx *cardano.Tx) bool {
+	isInitCourse := false
+
 	requiredAssets := map[string]bool{
 		// "LocalStateNFT":           false,	// TODO
-		"LocalStateToken":         false,
-		"InstanceGovernanceToken": false,
+		"LocalStateToken":                    false,
+		"InstanceGovernanceToken":            false,
+		"CourseStateScriptsV2ReferenceInput": false,
 	}
 
 	mints := tx.GetMint()
 
-	// referenceInputs := tx.GetReferenceInputs() // TODO: check if CourseStateScriptsV2 is present
+	// Check if CourseStateScriptsV2 is present
+	referenceInputs := tx.GetReferenceInputs()
+	for _, refInput := range referenceInputs {
+		for _, assets := range refInput.GetAsOutput().GetAssets() {
+			for _, asset := range assets.GetAssets() {
+				assetName := string(asset.GetName())
+				if assetName == "CourseStateScriptsV2" {
+					requiredAssets["CourseStateScriptsV2ReferenceInput"] = true
+				}
+			}
+		}
+	}
 
-	// Identification logic
-	isInitCourse := false
 	if len(mints) > 0 {
 		for _, mint := range mints {
 			if hex.EncodeToString(mint.GetPolicyId()) == "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a" {
