@@ -73,7 +73,7 @@ paths:
   /admin/course/create:
     get:
       tags:
-        - course
+        - admin course
       description: 'Create a course.'
       parameters:
         - name: alias
@@ -110,7 +110,7 @@ paths:
   /student/course/enroll:
     get:
       tags:
-        - course
+        - student course
       description: 'Join a course.'
       parameters:
         - name: alias
@@ -157,7 +157,7 @@ paths:
   # /teacher/course/modules/create:
   #   post:
   #     tags:
-  #       - course
+  #       - teacher course
   #     description: 'Create new course modules with Student Learning Targets and prerequisites.'
   #     parameters:
   #       - name: alias
@@ -206,7 +206,7 @@ paths:
   /teacher/course/modules/manage:
     post:
       tags:
-        - course
+        - teacher course
       description: 'Create, update, or delete course modules in batch.'
       parameters:
         - name: alias
@@ -270,7 +270,7 @@ paths:
   /student/course/assignment/submit:
     get:
       tags:
-        - course
+        - student course
       description: 'Submit assignment.'
       parameters:
         - name: alias
@@ -317,7 +317,7 @@ paths:
   /teacher/course/assignment/assess:
     get:
       tags:
-        - course
+        - teacher course
       description: 'Assess an assignment.'
       parameters:
         - name: alias
@@ -367,7 +367,7 @@ paths:
   /teacher/course/assignments/assess:
     post:
       tags:
-        - course
+        - teacher course
       description: 'Assess multiple student assignments in batch (accept or refuse).'
       parameters:
         - name: alias
@@ -412,7 +412,7 @@ paths:
   /student/course/assignment/update:
     get:
       tags:
-        - course
+        - student course
       description: 'Update an assignment.'
       parameters:
         - name: alias
@@ -459,7 +459,7 @@ paths:
   /student/course/credential/claim:
     get:
       tags:
-        - course
+        - student course
       description: 'Complete a course.'
       parameters:
         - name: alias
@@ -494,7 +494,7 @@ paths:
   /admin/course/teachers/update:
     get:
       tags:
-        - course
+        - admin course
       description: 'Update course teachers.'
       parameters:
         - name: alias

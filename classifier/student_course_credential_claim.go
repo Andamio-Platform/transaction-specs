@@ -7,14 +7,14 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func StudentCourseCredentialClaim(tx *cardano.Tx, courseIds []string) bool {
+func StudentCourseCredentialClaim(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {
 		for _, mint := range mints {
 			for _, asset := range mint.GetAssets() {
 				if asset.MintCoin == -1 {
-					if slices.Contains(courseIds, hex.EncodeToString(mint.GetPolicyId())) {
+					if slices.Contains(courseStatePolicyIds, hex.EncodeToString(mint.GetPolicyId())) {
 						return true
 					}
 				}
