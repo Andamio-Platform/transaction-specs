@@ -12,10 +12,10 @@ import (
 
 func main() {
 
-	hashHex := "64b0b7fe30a6e34ade9bd489e1bdc72ef5495f7c56e9b30154851cf4812a06cc"
+	hashHex := "b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d"
 	tx := GetCardanoTx(hashHex)
 
-	_ = hex.EncodeToString(tx.Hash)
+	TeacherCourseModulesManage(tx)
 }
 
 func GetCardanoTx(hashHex string) *cardano.Tx {

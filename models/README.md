@@ -8,6 +8,7 @@
     "admin": "string",
     "teachers": ["string"],
     "courseAddress": "string",
+    "courseStatePolicyId": "string"
 }
 ```
 

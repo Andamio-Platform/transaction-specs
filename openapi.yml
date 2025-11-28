@@ -154,55 +154,55 @@ paths:
       responses:
         '200':
           description: OK
-  /teacher/course/modules/create:
-    post:
-      tags:
-        - course
-      description: 'Create new course modules with Student Learning Targets and prerequisites.'
-      parameters:
-        - name: alias
-          in: query
-          description: 'Access Token Alias of Teacher'
-          required: true
-          schema:
-            type: string
-            minLength: 1
-        - name: courseId
-          in: query
-          description: 'Course ID'
-          required: true
-          schema:
-            type: string
-            minLength: 1
-        - $ref: '#/components/parameters/addressesParam'
-        - $ref: '#/components/parameters/changeAddressParam'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - modules
-              properties:
-                modules:
-                  type: array
-                  description: 'Modules to be created'
-                  items:
-                    $ref: '#/components/schemas/ModuleItem'
-            example:
-              modules:
-                - slts:
-                    - 'I can test 1'
-                    - 'I can test 2'
-                  prerequisites:
-                    - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
-                - slts:
-                    - 'I can implement'
-                  prerequisites: []
-      responses:
-        '200':
-          description: OK
+  # /teacher/course/modules/create:
+  #   post:
+  #     tags:
+  #       - course
+  #     description: 'Create new course modules with Student Learning Targets and prerequisites.'
+  #     parameters:
+  #       - name: alias
+  #         in: query
+  #         description: 'Access Token Alias of Teacher'
+  #         required: true
+  #         schema:
+  #           type: string
+  #           minLength: 1
+  #       - name: courseId
+  #         in: query
+  #         description: 'Course ID'
+  #         required: true
+  #         schema:
+  #           type: string
+  #           minLength: 1
+  #       - $ref: '#/components/parameters/addressesParam'
+  #       - $ref: '#/components/parameters/changeAddressParam'
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - modules
+  #             properties:
+  #               modules:
+  #                 type: array
+  #                 description: 'Modules to be created'
+  #                 items:
+  #                   $ref: '#/components/schemas/ModuleItem'
+  #           example:
+  #             modules:
+  #               - slts:
+  #                   - 'I can test 1'
+  #                   - 'I can test 2'
+  #                 prerequisites:
+  #                   - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
+  #               - slts:
+  #                   - 'I can implement'
+  #                 prerequisites: []
+  #     responses:
+  #       '200':
+  #         description: OK
   /teacher/course/modules/manage:
     post:
       tags:

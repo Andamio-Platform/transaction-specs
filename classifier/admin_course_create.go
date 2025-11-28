@@ -15,6 +15,8 @@ func AdminCourseCreate(tx *cardano.Tx) bool {
 
 	mints := tx.GetMint()
 
+	// referenceInputs := tx.GetReferenceInputs() // TODO: check if CourseStateScriptsV2 is present
+
 	// Identification logic
 	isInitCourse := false
 	if len(mints) > 0 {
