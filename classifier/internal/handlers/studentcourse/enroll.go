@@ -16,9 +16,28 @@ func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCours
 			for _, asset := range mint.GetAssets() {
 				if asset.MintCoin == 1 {
 					if slices.Contains(courseStatePolicyIds, hex.EncodeToString(mint.GetPolicyId())) {
+
+						alias := string(asset.GetName())
+
+						var courseID string
+						referenceInputs := tx.GetReferenceInputs()
+						for _, refInput := range referenceInputs {
+							refOutput := refInput.GetAsOutput()
+							refMultiassets := refOutput.GetAssets()
+							for _, refMa := range refMultiassets {
+								for _, refAsset := range refMa.GetAssets() {
+									if string(refAsset.GetName()) == "LocalStateToken" {
+										datum := refOutput.GetDatum().GetPayload()
+										courseID = hex.EncodeToString(datum.GetBoundedBytes())
+									}
+								}
+							}
+						}
+
 						return &models.StudentCourseEnroll{
-							TxHash: hex.EncodeToString(tx.GetHash()),
-							// TODO: Extract other fields
+							TxHash:   hex.EncodeToString(tx.GetHash()),
+							Alias:    alias,
+							CourseID: courseID,
 						}, true
 					}
 				}

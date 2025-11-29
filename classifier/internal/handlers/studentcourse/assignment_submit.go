@@ -23,9 +23,32 @@ func SubmitAssignment(tx *cardano.Tx, courseStatePolicyIds []string) (*models.St
 					// Check if content is not empty string
 					content := datum.GetConstr().GetFields()[1].GetBoundedBytes()
 					if len(content) > 0 {
+
+						alias := string(ma.GetAssets()[0].GetName())
+
+						var courseID string
+						referenceInputs := tx.GetReferenceInputs()
+						for _, refInput := range referenceInputs {
+							refOutput := refInput.GetAsOutput()
+							refMultiassets := refOutput.GetAssets()
+							for _, refMa := range refMultiassets {
+								for _, refAsset := range refMa.GetAssets() {
+									if string(refAsset.GetName()) == "LocalStateToken" {
+										datum := refOutput.GetDatum().GetPayload()
+										courseID = hex.EncodeToString(datum.GetBoundedBytes())
+									}
+								}
+							}
+						}
+
+						assignmentID := hex.EncodeToString(datum.GetConstr().GetFields()[0].GetBoundedBytes())
+
 						return &models.StudentCourseAssignmentSubmit{
-							TxHash: hex.EncodeToString(tx.GetHash()),
-							// TODO: Extract other fields
+							TxHash:       hex.EncodeToString(tx.GetHash()),
+							Alias:        alias,
+							CourseID:     courseID,
+							AssignmentID: assignmentID,
+							Content:      hex.EncodeToString(content),
 						}, true
 					}
 				}

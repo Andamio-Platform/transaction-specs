@@ -35,33 +35,29 @@ type AdminCourseCreate struct {
 	Teachers            StringArray `gorm:"type:jsonb" json:"teachers"`
 	CourseAddress       string      `json:"courseAddress"`
 	CourseStatePolicyId string      `json:"courseStatePolicyId"`
-	CreatedAt           time.Time   `gorm:"autoCreateTime" json:"created_at"`
 }
 
 // AdminCourseTeachersUpdate - /admin/course/teachers/update
 type AdminCourseTeachersUpdate struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	CourseID  string    `json:"courseId"`
-	Teachers  string    `gorm:"type:jsonb" json:"teachers"` // Stores add/remove operations as JSON
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash   string `gorm:"primaryKey" json:"txHash"`
+	CourseID string `json:"courseId"`
+	Teachers string `gorm:"type:jsonb" json:"teachers"` // Stores add/remove operations as JSON
 }
 
 // StudentCourseEnroll - /student/course/enroll
 type StudentCourseEnroll struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	Alias     string    `json:"alias"`
-	CourseID  string    `json:"courseId"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash   string `gorm:"primaryKey" json:"txHash"`
+	Alias    string `json:"alias"`
+	CourseID string `json:"courseId"`
 }
 
 // StudentCourseAssignmentSubmit - /student/course/assignment/submit
 type StudentCourseAssignmentSubmit struct {
-	TxHash       string    `gorm:"primaryKey" json:"txHash"`
-	Alias        string    `json:"alias"`
-	CourseID     string    `json:"courseId"`
-	AssignmentID string    `json:"assignmentId"`
-	Content      string    `gorm:"type:text" json:"content"`
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash       string `gorm:"primaryKey" json:"txHash"`
+	Alias        string `json:"alias"`
+	CourseID     string `json:"courseId"`
+	AssignmentID string `json:"assignmentId"`
+	Content      string `gorm:"type:text" json:"content"`
 }
 
 // StudentCourseAssignmentUpdate - /student/course/assignment/update
@@ -76,34 +72,30 @@ type StudentCourseAssignmentUpdate struct {
 
 // StudentCourseCredentialClaim - /student/course/credential/claim
 type StudentCourseCredentialClaim struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	Alias     string    `json:"alias"`
-	CourseID  string    `json:"courseId"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash   string `gorm:"primaryKey" json:"txHash"`
+	Alias    string `json:"alias"`
+	CourseID string `json:"courseId"`
 }
 
 // TeacherCourseModulesManage - /teacher/course/modules/manage
 type TeacherCourseModulesManage struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	Alias     string    `json:"alias"`
-	CourseID  string    `json:"courseId"`
-	Modules   string    `gorm:"type:jsonb" json:"modules"` // Stores create/update/delete operations as JSON
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash   string `gorm:"primaryKey" json:"txHash"`
+	Alias    string `json:"alias"`
+	CourseID string `json:"courseId"`
+	Modules  string `gorm:"type:jsonb" json:"modules"` // Stores create/update/delete operations as JSON
 }
 
 // TeacherCourseAssignmentsAssess - /teacher/course/assignments/assess
 type TeacherCourseAssignmentsAssess struct {
-	TxHash       string    `gorm:"primaryKey" json:"txHash"`
-	Alias        string    `json:"alias"`
-	CourseID     string    `json:"courseId"`
-	AssignmentID string    `json:"assignmentId"`
-	Assessments  string    `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash       string `gorm:"primaryKey" json:"txHash"`
+	Alias        string `json:"alias"`
+	CourseID     string `json:"courseId"`
+	AssignmentID string `json:"assignmentId"`
+	Assessments  string `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
 }
 
 // UserAccessTokenMint - /user/access-token/mint
 type UserAccessTokenMint struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	Alias     string    `json:"alias"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	TxHash string `gorm:"primaryKey" json:"txHash"`
+	Alias  string `json:"alias"`
 }
