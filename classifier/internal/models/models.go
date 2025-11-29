@@ -3,7 +3,6 @@ package models
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"time"
 )
 
 // StringArray is a custom type for storing string arrays in PostgreSQL
@@ -62,19 +61,19 @@ type StudentCourseAssignmentSubmit struct {
 
 // StudentCourseAssignmentUpdate - /student/course/assignment/update
 type StudentCourseAssignmentUpdate struct {
-	TxHash       string    `gorm:"primaryKey" json:"txHash"`
-	Alias        string    `json:"alias"`
-	CourseID     string    `json:"courseId"`
-	AssignmentID string    `json:"assignmentId"`
-	Content      string    `gorm:"type:text" json:"content"`
-	UpdatedAt    time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	TxHash       string `gorm:"primaryKey" json:"txHash"`
+	Alias        string `json:"alias"`
+	CourseID     string `json:"courseId"`
+	AssignmentID string `json:"assignmentId"`
+	Content      string `gorm:"type:text" json:"content"`
 }
 
 // StudentCourseCredentialClaim - /student/course/credential/claim
 type StudentCourseCredentialClaim struct {
-	TxHash   string `gorm:"primaryKey" json:"txHash"`
-	Alias    string `json:"alias"`
-	CourseID string `json:"courseId"`
+	TxHash      string      `gorm:"primaryKey" json:"txHash"`
+	Alias       string      `json:"alias"`
+	CourseID    string      `json:"courseId"`
+	Credentials StringArray `gorm:"type:jsonb" json:"credentials"`
 }
 
 // TeacherCourseModulesManage - /teacher/course/modules/manage
