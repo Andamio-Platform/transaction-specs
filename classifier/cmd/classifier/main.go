@@ -1,13 +1,14 @@
 package main
 
 import (
-	"classifier/internal/handlers/admincourse"
-	"classifier/internal/handlers/studentcourse"
-	"classifier/internal/handlers/teachercourse"
-	"classifier/internal/handlers/useraccesstoken"
-	"classifier/internal/utils"
 	"fmt"
 	"strings"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/admincourse"
+	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/studentcourse"
+	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/teachercourse"
+	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/useraccesstoken"
+	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
 )
 
 func main() {

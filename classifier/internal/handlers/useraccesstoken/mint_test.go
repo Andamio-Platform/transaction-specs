@@ -1,8 +1,9 @@
 package useraccesstoken
 
 import (
-	"classifier/internal/utils"
 	"testing"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
 )
 
 func TestMint(t *testing.T) {

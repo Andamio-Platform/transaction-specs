@@ -1,8 +1,9 @@
 package studentcourse
 
 import (
-	"classifier/internal/utils"
 	"testing"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
 )
 
 func TestSubmitAssignment(t *testing.T) {

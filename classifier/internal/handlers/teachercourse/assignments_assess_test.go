@@ -1,8 +1,9 @@
 package teachercourse
 
 import (
-	"classifier/internal/utils"
 	"testing"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
 )
 
 func TestAssessAssignments(t *testing.T) {
