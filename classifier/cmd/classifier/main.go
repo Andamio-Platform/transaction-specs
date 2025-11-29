@@ -21,10 +21,10 @@ func main() {
 		// "c58ddc70c8f322937d14a41e140bcbd342e9be1e96f0ba08005d1dcdb9540654", // UserAccessToken → MINT
 		// "289c60362495eed68e209a59ff002972cf22969207854059afce2f8ac8576354", // UserAccessToken → MINT
 		// "ff695f713489b7b7588f18b66f7a2744455a5bd474845153331ae845dbe425a0", // UserAccessToken → MINT
-		// "b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d", // TeacherCourse → MANAGE_MODULES
+		"b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d", // TeacherCourse → MANAGE_MODULES
 		// "92d4ba99124b11aef75e4b2dd36e91b6e5b81e383c496836b6bdf3d9daf8dad2", // StudentCourse → ENROLL , StudentCourse → SUBMIT_ASSIGNMENT
 		// "7a96d45238788c92143a3bc2aaae2d405c25efe5da1281b2930bd42e717d90fa", // TeacherCourse → ASSESS_ASSIGNMENTS
-		"baf3d65fa644ce636536b0f9eef6591f26d2ee1561c26b80354cb17fb36a8eea", // StudentCourse → CLAIM_CREDENTIAL
+		// "baf3d65fa644ce636536b0f9eef6591f26d2ee1561c26b80354cb17fb36a8eea", // StudentCourse → CLAIM_CREDENTIAL
 		// "81a7be23da69be08b330b021a3b7d435e2a726cfceb51bb0c93ffa2c3763ce45", // TeacherCourse → MANAGE_MODULES
 		// "80fac6d6516429700728e1a4883eac3f19eea46fc1ebf2810dd01359c9e346fe", // UserAccessToken → MINT
 		// "863e38af684c603900a3297ed726ddd1f8def8dce68180a73e2267a4f69cf104", // StudentCourse → ENROLL , StudentCourse → SUBMIT_ASSIGNMENT
@@ -77,7 +77,7 @@ func main() {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("TeacherCourse → ASSESS_ASSIGNMENTS\n%s", string(jsonBytes)))
 		}
-		if model, ok := teachercourse.ManageModules(tx, moduleScriptsV2PolicyId); ok {
+		if model, ok := teachercourse.ManageModules(tx, moduleScriptsV2PolicyId, accessTokenPolicy); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("TeacherCourse → MANAGE_MODULES\n%s", string(jsonBytes)))
 		}

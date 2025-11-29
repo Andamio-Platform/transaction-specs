@@ -9,7 +9,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) (*models.TeacherCourseModulesManage, bool) {
+func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string, accessTokenPolicy string) (*models.TeacherCourseModulesManage, bool) {
 
 	referenceInputs := tx.GetReferenceInputs()
 	for _, refInput := range referenceInputs {
@@ -32,9 +32,69 @@ func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) (*models.Teac
 		}
 
 		if hex.EncodeToString(hash.Bytes()) == moduleScriptsV2PolicyId {
+			var alias string
+			var courseID string
+			outputs := tx.GetOutputs()
+			for _, output := range outputs {
+				multiassets := output.GetAssets()
+				for _, multiasset := range multiassets {
+					assets := multiasset.GetAssets()
+					for _, asset := range assets {
+						if hex.EncodeToString(multiasset.GetPolicyId()) == accessTokenPolicy {
+							alias = string(asset.GetName())[1:]
+						}
+						if hex.EncodeToString(multiasset.GetPolicyId()) == moduleScriptsV2PolicyId {
+							datum := output.GetDatum().GetPayload()
+							courseID = hex.EncodeToString(datum.GetConstr().GetFields()[0].GetBoundedBytes())
+						}
+					}
+				}
+			}
+
+			var createSlts []models.ModuleCreate
+			mints := tx.GetMint()
+			for _, mint := range mints {
+				if hex.EncodeToString(mint.GetPolicyId()) == moduleScriptsV2PolicyId {
+					assets := mint.GetAssets()
+					for _, asset := range assets {
+						var slts models.StringArray
+						var prerequisites models.StringArray = models.StringArray{}
+						if asset.GetMintCoin() > 0 {
+							redeemer := mint.GetRedeemer().GetPayload()
+							modules := redeemer.GetConstr().GetFields()[2].GetArray().GetItems()
+							sltsPlutusData := modules[0].GetArray().GetItems()
+							for _, sltPlutusData := range sltsPlutusData {
+								slts = append(slts, string(sltPlutusData.GetBoundedBytes()))
+							}
+							if len(modules) > 1 {
+								prerequisitesPlutusData := modules[1].GetArray().GetItems()
+								for _, prerequisitePlutusData := range prerequisitesPlutusData {
+									prerequisites = append(prerequisites, string(prerequisitePlutusData.GetBoundedBytes()))
+								}
+							}
+							createSlts = append(createSlts, models.ModuleCreate{
+								SLTs:          slts,
+								Prerequisites: prerequisites,
+							})
+						}
+					}
+				}
+			}
+
 			return &models.TeacherCourseModulesManage{
-				TxHash: hex.EncodeToString(tx.GetHash()),
-				// TODO: Extract other fields
+				TxHash:   hex.EncodeToString(tx.GetHash()),
+				Alias:    alias,
+				CourseID: courseID,
+				Modules: models.Modules{
+					Create: createSlts,
+					Update: []models.ModuleUpdate{
+						{
+							SLTHash:       "gg",
+							Prerequisites: models.StringArray{"gg"},
+						},
+					},
+					Delete: models.StringArray{"gg"},
+				},
 			}, true
 		}
 	}
