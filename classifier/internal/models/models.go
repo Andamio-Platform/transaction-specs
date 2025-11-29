@@ -29,13 +29,23 @@ func (a *StringArray) Scan(value interface{}) error {
 
 // AdminCourseCreate - /admin/course/create
 type AdminCourseCreate struct {
-	TxHash        string      `gorm:"primaryKey" json:"txHash"`
-	ID            string      `gorm:"primaryKey" json:"id"`
-	CourseID      string      `json:"courseId"`
-	Admin         string      `json:"admin"`
-	Teachers      StringArray `gorm:"type:jsonb" json:"teachers"`
-	CourseAddress string      `json:"courseAddress"`
-	CreatedAt     time.Time   `gorm:"autoCreateTime" json:"created_at"`
+	TxHash              string      `gorm:"primaryKey" json:"txHash"`
+	ID                  string      `gorm:"primaryKey" json:"id"`
+	CourseID            string      `json:"courseId"`
+	Admin               string      `json:"admin"`
+	Teachers            StringArray `gorm:"type:jsonb" json:"teachers"`
+	CourseAddress       string      `json:"courseAddress"`
+	CourseStatePolicyId string      `json:"courseStatePolicyId"`
+	CreatedAt           time.Time   `gorm:"autoCreateTime" json:"created_at"`
+}
+
+// AdminCourseTeachersUpdate - /admin/course/teachers/update
+type AdminCourseTeachersUpdate struct {
+	TxHash    string    `gorm:"primaryKey" json:"txHash"`
+	ID        string    `gorm:"primaryKey" json:"id"`
+	CourseID  string    `json:"courseId"`
+	Teachers  string    `gorm:"type:jsonb" json:"teachers"` // Stores add/remove operations as JSON
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
 // StudentCourseEnroll - /student/course/enroll
@@ -47,26 +57,6 @@ type StudentCourseEnroll struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-// TeacherCourseModulesCreate - /teacher/course/modules/create
-type TeacherCourseModulesCreate struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	ID        string    `gorm:"primaryKey" json:"id"`
-	Alias     string    `json:"alias"`
-	CourseID  string    `json:"courseId"`
-	Modules   string    `gorm:"type:jsonb" json:"modules"` // Stores the modules array as JSON
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-}
-
-// TeacherCourseModulesManage - /teacher/course/modules/manage
-type TeacherCourseModulesManage struct {
-	TxHash    string    `gorm:"primaryKey" json:"txHash"`
-	ID        string    `gorm:"primaryKey" json:"id"`
-	Alias     string    `json:"alias"`
-	CourseID  string    `json:"courseId"`
-	Modules   string    `gorm:"type:jsonb" json:"modules"` // Stores create/update/delete operations as JSON
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-}
-
 // StudentCourseAssignmentSubmit - /student/course/assignment/submit
 type StudentCourseAssignmentSubmit struct {
 	TxHash       string    `gorm:"primaryKey" json:"txHash"`
@@ -75,17 +65,6 @@ type StudentCourseAssignmentSubmit struct {
 	CourseID     string    `json:"courseId"`
 	AssignmentID string    `json:"assignmentId"`
 	Content      string    `gorm:"type:text" json:"content"`
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
-}
-
-// TeacherCourseAssignmentsAssess - /teacher/course/assignments/assess
-type TeacherCourseAssignmentsAssess struct {
-	TxHash       string    `gorm:"primaryKey" json:"txHash"`
-	ID           string    `gorm:"primaryKey" json:"id"`
-	Alias        string    `json:"alias"`
-	CourseID     string    `json:"courseId"`
-	AssignmentID string    `json:"assignmentId"`
-	Assessments  string    `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
 	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
@@ -109,11 +88,23 @@ type StudentCourseCredentialClaim struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-// AdminCourseTeachersUpdate - /admin/course/teachers/update
-type AdminCourseTeachersUpdate struct {
+// TeacherCourseModulesManage - /teacher/course/modules/manage
+type TeacherCourseModulesManage struct {
 	TxHash    string    `gorm:"primaryKey" json:"txHash"`
 	ID        string    `gorm:"primaryKey" json:"id"`
+	Alias     string    `json:"alias"`
 	CourseID  string    `json:"courseId"`
-	Teachers  string    `gorm:"type:jsonb" json:"teachers"` // Stores add/remove operations as JSON
+	Modules   string    `gorm:"type:jsonb" json:"modules"` // Stores create/update/delete operations as JSON
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+}
+
+// TeacherCourseAssignmentsAssess - /teacher/course/assignments/assess
+type TeacherCourseAssignmentsAssess struct {
+	TxHash       string    `gorm:"primaryKey" json:"txHash"`
+	ID           string    `gorm:"primaryKey" json:"id"`
+	Alias        string    `json:"alias"`
+	CourseID     string    `json:"courseId"`
+	AssignmentID string    `json:"assignmentId"`
+	Assessments  string    `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
+	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
 }

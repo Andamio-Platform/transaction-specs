@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"context"
@@ -9,14 +9,6 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/query"
 	sdk "github.com/utxorpc/go-sdk"
 )
-
-func main() {
-
-	hashHex := "b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d"
-	tx := GetCardanoTx(hashHex)
-
-	TeacherCourseModulesManage(tx)
-}
 
 func GetCardanoTx(hashHex string) *cardano.Tx {
 	baseUrl := "https://preprod.utxorpc.dolos.andamio.space"

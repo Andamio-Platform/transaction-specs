@@ -1,4 +1,4 @@
-package main
+package admincourse
 
 import (
 	"encoding/hex"
@@ -6,7 +6,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func AdminCourseCreate(tx *cardano.Tx) bool {
+func CreateCourse(tx *cardano.Tx, LocalStateTokenPolicyId string, InstanceGovernanceTokenPolicyId string) bool {
 	isInitCourse := false
 
 	requiredAssets := map[string]bool{
@@ -33,7 +33,7 @@ func AdminCourseCreate(tx *cardano.Tx) bool {
 
 	if len(mints) > 0 {
 		for _, mint := range mints {
-			if hex.EncodeToString(mint.GetPolicyId()) == "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a" {
+			if hex.EncodeToString(mint.GetPolicyId()) == LocalStateTokenPolicyId {
 				assets := mint.GetAssets()
 				for _, asset := range assets {
 					assetName := string(asset.GetName())
@@ -45,7 +45,7 @@ func AdminCourseCreate(tx *cardano.Tx) bool {
 				}
 			}
 
-			if hex.EncodeToString(mint.GetPolicyId()) == "60e72e5ee056545fcb37f2d3f9b853daede356516ab5c80f886a652a" {
+			if hex.EncodeToString(mint.GetPolicyId()) == InstanceGovernanceTokenPolicyId {
 				requiredAssets["InstanceGovernanceToken"] = true
 			}
 		}

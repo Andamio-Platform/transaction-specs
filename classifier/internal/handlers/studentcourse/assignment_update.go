@@ -1,8 +1,8 @@
-package main
+package studentcourse
 
 import "github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 
-func StudentCourseAssignmentUpdate(tx *cardano.Tx) bool {
+func UpdateAssignment(tx *cardano.Tx) bool {
 
 	// Check if (the input datum is constructor 1 && the output datum is constructor 1)
 

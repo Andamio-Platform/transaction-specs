@@ -1,4 +1,4 @@
-package main
+package teachercourse
 
 import (
 	"encoding/hex"
@@ -8,8 +8,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func TeacherCourseModulesManage(tx *cardano.Tx) bool {
-	targetHash := "0881d005d4301748df5aab08fbd302ad62f06a1b6b154664c96b9ba7"
+func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) bool {
 
 	referenceInputs := tx.GetReferenceInputs()
 	for _, refInput := range referenceInputs {
@@ -31,7 +30,7 @@ func TeacherCourseModulesManage(tx *cardano.Tx) bool {
 			continue
 		}
 
-		if hex.EncodeToString(hash.Bytes()) == targetHash {
+		if hex.EncodeToString(hash.Bytes()) == moduleScriptsV2PolicyId {
 			return true
 		}
 	}

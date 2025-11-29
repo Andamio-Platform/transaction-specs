@@ -1,4 +1,4 @@
-package main
+package studentcourse
 
 import (
 	"encoding/hex"
@@ -7,7 +7,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func StudentCourseEnroll(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {

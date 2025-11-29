@@ -1,4 +1,5 @@
 
+## admincourse
 
 `/admin/course/create`
 
@@ -12,6 +13,20 @@
 }
 ```
 
+`/admin/course/teachers/update`
+
+```json
+{
+    "courseId": "string",
+    "teachers": {
+        "add": ["string"],
+        "remove": ["string"]
+    }
+}
+```
+
+## studentcourse
+
 `/student/course/enroll`
 
 ```json
@@ -21,20 +36,38 @@
 }
 ```
 
-`/teacher/course/modules/create`
+`/student/course/assignment/submit`
 
 ```json
 {
     "alias": "string",
     "courseId": "string",
-    "modules": [
-        {
-            "slts": ["string"],
-            "prerequisites": ["string"],
-        }
-    ]
+    "assignmentId": "string",
+    "content": "string"
 }
 ```
+
+`/student/course/assignment/update`
+
+```json
+{
+    "alias": "string",
+    "courseId": "string",
+    "assignmentId": "string",
+    "content": "string"
+}
+```
+
+`/student/course/credential/claim`
+
+```json
+{
+    "alias": "string",
+    "courseId": "string",
+}
+```
+
+## teachercourse
 
 `/teacher/course/modules/manage`
 
@@ -60,17 +93,6 @@
 }
 ```
 
-`/student/course/assignment/submit`
-
-```json
-{
-    "alias": "string",
-    "courseId": "string",
-    "assignmentId": "string",
-    "content": "string"
-}
-```
-
 `/teacher/course/assignments/assess`
 
 ```json
@@ -87,34 +109,4 @@
 }
 ```
 
-`/student/course/assignment/update`
 
-```json
-{
-    "alias": "string",
-    "courseId": "string",
-    "assignmentId": "string",
-    "content": "string"
-}
-```
-
-`/student/course/credential/claim`
-
-```json
-{
-    "alias": "string",
-    "courseId": "string",
-}
-```
-
-`/admin/course/teachers/update`
-
-```json
-{
-    "courseId": "string",
-    "teachers": {
-        "add": ["string"],
-        "remove": ["string"]
-    }
-}
-```

@@ -1,8 +1,8 @@
-package main
+package teachercourse
 
 import "github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 
-func TeacherCourseAssignmentsAssess(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+func AssessAssignments(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 	// Check outputs has one of the courseStatePolicyIds
 
 	// Check if user (u) token is different with course state token
