@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePolicyIds []string) bool {
+func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePolicyIds []string) (*models.TeacherCourseAssignmentsAssess, bool) {
 
 	type Decision string
 
@@ -47,7 +48,7 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 	}
 
 	if userToken == "" || courseStateToken == "" {
-		return false
+		return nil, false
 	}
 
 	// Then Check Datum structure for the input token and the output token
@@ -59,25 +60,35 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 
 		constr := datum.GetConstr()
 		if constr == nil {
-			return false
+			return nil, false
 		}
 
 		switch constr.GetTag() {
 		case 121:
 			decision = Accept
 			println(decision)
-			return handleAccept(constr)
+			if handleAccept(constr) {
+				return &models.TeacherCourseAssignmentsAssess{
+					TxHash: hex.EncodeToString(tx.GetHash()),
+					// TODO: Extract other fields
+				}, true
+			}
 		case 122:
 			decision = Refuse
 			println(decision)
-			return handleRefuse(constr)
+			if handleRefuse(constr) {
+				return &models.TeacherCourseAssignmentsAssess{
+					TxHash: hex.EncodeToString(tx.GetHash()),
+					// TODO: Extract other fields
+				}, true
+			}
 		default:
-			return false
+			return nil, false
 		}
 
 	}
 
-	return false
+	return nil, false
 }
 
 func handleAccept(constr *cardano.Constr) bool {

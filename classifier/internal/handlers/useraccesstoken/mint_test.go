@@ -17,10 +17,10 @@ func TestMint(t *testing.T) {
 
 	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
 
-	result := Mint(tx, accessTokenPolicy)
-	t.Logf("Mint result: %v", result)
+	_, ok := Mint(tx, accessTokenPolicy)
+	t.Logf("Mint result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as Mint transaction")
 	}
 }

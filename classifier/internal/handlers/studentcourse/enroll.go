@@ -4,10 +4,11 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseEnroll, bool) {
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {
@@ -15,12 +16,15 @@ func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 			for _, asset := range mint.GetAssets() {
 				if asset.MintCoin == 1 {
 					if slices.Contains(courseStatePolicyIds, hex.EncodeToString(mint.GetPolicyId())) {
-						return true
+						return &models.StudentCourseEnroll{
+							TxHash: hex.EncodeToString(tx.GetHash()),
+							// TODO: Extract other fields
+						}, true
 					}
 				}
 			}
 		}
 
 	}
-	return false
+	return nil, false
 }

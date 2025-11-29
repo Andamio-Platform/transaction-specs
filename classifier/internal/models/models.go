@@ -108,3 +108,11 @@ type TeacherCourseAssignmentsAssess struct {
 	Assessments  string    `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
 	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
+
+// UserAccessTokenMint - /user/access-token/mint
+type UserAccessTokenMint struct {
+	TxHash    string    `gorm:"primaryKey" json:"txHash"`
+	ID        string    `gorm:"primaryKey" json:"id"`
+	Alias     string    `json:"alias"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+}

@@ -17,10 +17,10 @@ func TestEnroll(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	result := Enroll(tx, courseStatePolicyIds)
-	t.Logf("Enroll result: %v", result)
+	_, ok := Enroll(tx, courseStatePolicyIds)
+	t.Logf("Enroll result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as Enroll transaction")
 	}
 }

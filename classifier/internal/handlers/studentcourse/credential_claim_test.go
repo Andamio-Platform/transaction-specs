@@ -17,10 +17,10 @@ func TestClaimCredential(t *testing.T) {
 
 	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
 
-	result := ClaimCredential(tx, courseStatePolicyIds)
-	t.Logf("ClaimCredential result: %v", result)
+	_, ok := ClaimCredential(tx, courseStatePolicyIds)
+	t.Logf("ClaimCredential result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as ClaimCredential transaction")
 	}
 }

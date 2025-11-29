@@ -18,10 +18,10 @@ func TestAssessAssignments(t *testing.T) {
 	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
 	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
 
-	result := AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds)
-	t.Logf("AssessAssignments result: %v", result)
+	_, ok := AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds)
+	t.Logf("AssessAssignments result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as AssessAssignments transaction")
 	}
 }

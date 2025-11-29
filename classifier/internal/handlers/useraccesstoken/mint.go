@@ -4,9 +4,11 @@ import (
 	"encoding/hex"
 
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 )
 
-func Mint(tx *cardano.Tx, accessTokenPolicy string) bool {
+func Mint(tx *cardano.Tx, accessTokenPolicy string) (*models.UserAccessTokenMint, bool) {
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {
@@ -14,12 +16,15 @@ func Mint(tx *cardano.Tx, accessTokenPolicy string) bool {
 			for _, asset := range mint.GetAssets() {
 				if asset.MintCoin > 0 {
 					if hex.EncodeToString(mint.GetPolicyId()) == accessTokenPolicy {
-						return true
+						return &models.UserAccessTokenMint{
+							TxHash: hex.EncodeToString(tx.GetHash()),
+							// TODO: Extract other fields
+						}, true
 					}
 				}
 			}
 		}
 
 	}
-	return false
+	return nil, false
 }

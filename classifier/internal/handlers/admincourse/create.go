@@ -4,9 +4,11 @@ import (
 	"encoding/hex"
 
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
+
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 )
 
-func CreateCourse(tx *cardano.Tx, LocalStateTokenPolicyId string, InstanceGovernanceTokenPolicyId string) bool {
+func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernanceTokenPolicy string) (*models.AdminCourseCreate, bool) {
 	isInitCourse := false
 
 	requiredAssets := map[string]bool{
@@ -33,7 +35,7 @@ func CreateCourse(tx *cardano.Tx, LocalStateTokenPolicyId string, InstanceGovern
 
 	if len(mints) > 0 {
 		for _, mint := range mints {
-			if hex.EncodeToString(mint.GetPolicyId()) == LocalStateTokenPolicyId {
+			if hex.EncodeToString(mint.GetPolicyId()) == localStateTokenPolicy {
 				assets := mint.GetAssets()
 				for _, asset := range assets {
 					assetName := string(asset.GetName())
@@ -45,7 +47,7 @@ func CreateCourse(tx *cardano.Tx, LocalStateTokenPolicyId string, InstanceGovern
 				}
 			}
 
-			if hex.EncodeToString(mint.GetPolicyId()) == InstanceGovernanceTokenPolicyId {
+			if hex.EncodeToString(mint.GetPolicyId()) == instanceGovernanceTokenPolicy {
 				requiredAssets["InstanceGovernanceToken"] = true
 			}
 		}
@@ -61,5 +63,12 @@ func CreateCourse(tx *cardano.Tx, LocalStateTokenPolicyId string, InstanceGovern
 		isInitCourse = allFound
 	}
 
-	return isInitCourse
+	if isInitCourse {
+		return &models.AdminCourseCreate{
+			TxHash: hex.EncodeToString(tx.GetHash()),
+			// TODO: Extract other fields
+		}, true
+	}
+
+	return nil, false
 }

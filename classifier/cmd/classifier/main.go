@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -52,38 +53,47 @@ func main() {
 		var matched []string
 
 		// ===== UserAccessToken =====
-		if useraccesstoken.Mint(tx, accessTokenPolicy) {
-			matched = append(matched, "UserAccessToken → MINT")
+		if model, ok := useraccesstoken.Mint(tx, accessTokenPolicy); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("UserAccessToken → MINT\n%s", string(jsonBytes)))
 		}
 
 		// ===== AdminCourse =====
-		if admincourse.CreateCourse(tx, localStateTokenPolicy, instanceGovernanceTokenPolicy) {
-			matched = append(matched, "AdminCourse → CREATE_COURSE")
+		if model, ok := admincourse.CreateCourse(tx, localStateTokenPolicy, instanceGovernanceTokenPolicy); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("AdminCourse → CREATE_COURSE\n%s", string(jsonBytes)))
 		}
-		if admincourse.UpdateTeachers(tx) {
-			matched = append(matched, "AdminCourse → UPDATE_TEACHERS")
+		if model, ok := admincourse.UpdateTeachers(tx); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("AdminCourse → UPDATE_TEACHERS\n%s", string(jsonBytes)))
 		}
 
 		// ===== TeacherCourse =====
-		if teachercourse.AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds) {
-			matched = append(matched, "TeacherCourse → ASSESS_ASSIGNMENTS")
+		if model, ok := teachercourse.AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("TeacherCourse → ASSESS_ASSIGNMENTS\n%s", string(jsonBytes)))
 		}
-		if teachercourse.ManageModules(tx, moduleScriptsV2PolicyId) {
-			matched = append(matched, "TeacherCourse → MANAGE_MODULES")
+		if model, ok := teachercourse.ManageModules(tx, moduleScriptsV2PolicyId); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("TeacherCourse → MANAGE_MODULES\n%s", string(jsonBytes)))
 		}
 
 		// ===== StudentCourse =====
-		if studentcourse.Enroll(tx, courseStatePolicyIds) {
-			matched = append(matched, "StudentCourse → ENROLL")
+		if model, ok := studentcourse.Enroll(tx, courseStatePolicyIds); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("StudentCourse → ENROLL\n%s", string(jsonBytes)))
 		}
-		if studentcourse.SubmitAssignment(tx, courseStatePolicyIds) {
-			matched = append(matched, "StudentCourse → SUBMIT_ASSIGNMENT")
+		if model, ok := studentcourse.SubmitAssignment(tx, courseStatePolicyIds); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("StudentCourse → SUBMIT_ASSIGNMENT\n%s", string(jsonBytes)))
 		}
-		if studentcourse.UpdateAssignment(tx, courseStatePolicyIds) {
-			matched = append(matched, "StudentCourse → UPDATE_ASSIGNMENT")
+		if model, ok := studentcourse.UpdateAssignment(tx, courseStatePolicyIds); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("StudentCourse → UPDATE_ASSIGNMENT\n%s", string(jsonBytes)))
 		}
-		if studentcourse.ClaimCredential(tx, courseStatePolicyIds) {
-			matched = append(matched, "StudentCourse → CLAIM_CREDENTIAL")
+		if model, ok := studentcourse.ClaimCredential(tx, courseStatePolicyIds); ok {
+			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
+			matched = append(matched, fmt.Sprintf("StudentCourse → CLAIM_CREDENTIAL\n%s", string(jsonBytes)))
 		}
 
 		if len(matched) == 0 {
@@ -91,7 +101,7 @@ func main() {
 		} else if len(matched) == 1 {
 			fmt.Println("Classified as:", matched[0])
 		} else {
-			fmt.Printf("⚠️  Multiple classifications (%d): %s\n", len(matched), strings.Join(matched, " | "))
+			fmt.Printf("⚠️  Multiple classifications (%d):\n%s\n", len(matched), strings.Join(matched, "\n-------------------\n"))
 		}
 
 		fmt.Println("-------------------------------------------------")

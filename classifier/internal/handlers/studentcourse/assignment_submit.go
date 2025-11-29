@@ -4,10 +4,11 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func SubmitAssignment(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+func SubmitAssignment(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseAssignmentSubmit, bool) {
 
 	// TODO: Check if courseStateToken is minted (OR) input courseStateToken has datum with constructor 0
 
@@ -22,12 +23,15 @@ func SubmitAssignment(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 					// Check if content is not empty string
 					content := datum.GetConstr().GetFields()[1].GetBoundedBytes()
 					if len(content) > 0 {
-						return true
+						return &models.StudentCourseAssignmentSubmit{
+							TxHash: hex.EncodeToString(tx.GetHash()),
+							// TODO: Extract other fields
+						}, true
 					}
 				}
 			}
 		}
 	}
 
-	return false
+	return nil, false
 }

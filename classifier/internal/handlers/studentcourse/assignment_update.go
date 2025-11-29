@@ -4,10 +4,11 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func UpdateAssignment(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+func UpdateAssignment(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseAssignmentUpdate, bool) {
 	var oldContent string
 	var updatedContent string
 
@@ -28,5 +29,12 @@ func UpdateAssignment(tx *cardano.Tx, courseStatePolicyIds []string) bool {
 		}
 	}
 
-	return oldContent != updatedContent
+	if oldContent != updatedContent {
+		return &models.StudentCourseAssignmentUpdate{
+			TxHash: hex.EncodeToString(tx.GetHash()),
+			// TODO: Extract other fields
+		}, true
+	}
+
+	return nil, false
 }

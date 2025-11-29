@@ -17,10 +17,10 @@ func TestManageModules(t *testing.T) {
 
 	moduleScriptsV2PolicyId := "0881d005d4301748df5aab08fbd302ad62f06a1b6b154664c96b9ba7"
 
-	result := ManageModules(tx, moduleScriptsV2PolicyId)
-	t.Logf("ManageModules result: %v", result)
+	_, ok := ManageModules(tx, moduleScriptsV2PolicyId)
+	t.Logf("ManageModules result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as ManageModules transaction")
 	}
 }

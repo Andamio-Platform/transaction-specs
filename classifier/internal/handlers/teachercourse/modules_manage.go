@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"github.com/Salvionied/apollo/serialization/PlutusData"
+	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) bool {
+func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) (*models.TeacherCourseModulesManage, bool) {
 
 	referenceInputs := tx.GetReferenceInputs()
 	for _, refInput := range referenceInputs {
@@ -31,9 +32,12 @@ func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string) bool {
 		}
 
 		if hex.EncodeToString(hash.Bytes()) == moduleScriptsV2PolicyId {
-			return true
+			return &models.TeacherCourseModulesManage{
+				TxHash: hex.EncodeToString(tx.GetHash()),
+				// TODO: Extract other fields
+			}, true
 		}
 	}
 
-	return false
+	return nil, false
 }

@@ -18,10 +18,10 @@ func TestCreateCourse(t *testing.T) {
 	LocalStateTokenPolicyId := "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a"
 	InstanceGovernanceTokenPolicyId := "60e72e5ee056545fcb37f2d3f9b853daede356516ab5c80f886a652a"
 
-	result := CreateCourse(tx, LocalStateTokenPolicyId, InstanceGovernanceTokenPolicyId)
-	t.Logf("CreateCourse result: %v", result)
+	_, ok := CreateCourse(tx, LocalStateTokenPolicyId, InstanceGovernanceTokenPolicyId)
+	t.Logf("CreateCourse result: %v", ok)
 
-	if result != true {
+	if !ok {
 		t.Error(hashHex + " should be classified as CreateCourse transaction")
 	}
 }
