@@ -47,7 +47,6 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 	}
 
 	if userToken == "" || courseStateToken == "" {
-		fmt.Println("Required tokens not found in outputs.")
 		return false
 	}
 
@@ -60,7 +59,6 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 
 		constr := datum.GetConstr()
 		if constr == nil {
-			fmt.Println("Expected Constr at root, not found.")
 			return false
 		}
 
@@ -74,7 +72,6 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 			println(decision)
 			return handleRefuse(constr)
 		default:
-			fmt.Println("Unknown Constr tag")
 			return false
 		}
 
@@ -87,13 +84,11 @@ func handleAccept(constr *cardano.Constr) bool {
 
 	// Check structure: should have 1 field that’s an Array of ByteStrings
 	if len(constr.GetFields()) != 1 {
-		fmt.Println("Expected exactly one field in Constr.")
 		return false
 	}
 
 	array := constr.GetFields()[0].GetArray()
 	if array == nil {
-		fmt.Println("Expected Array in Constr field.")
 		return false
 	}
 

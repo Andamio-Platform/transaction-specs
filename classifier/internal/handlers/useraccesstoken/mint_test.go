@@ -1,0 +1,25 @@
+package useraccesstoken
+
+import (
+	"classifier/internal/utils"
+	"testing"
+)
+
+func TestMint(t *testing.T) {
+
+	hashHex := "5b0bb8b17580e67a23c22d692d5f078daed7a19250684c9760b5d3bd64f70c3a"
+	tx := utils.GetCardanoTx(hashHex)
+
+	if tx == nil {
+		t.Fatal("Failed to retrieve transaction")
+	}
+
+	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
+
+	result := Mint(tx, accessTokenPolicy)
+	t.Logf("Mint result: %v", result)
+
+	if result != true {
+		t.Error(hashHex + " should be classified as Mint transaction")
+	}
+}
