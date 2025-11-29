@@ -1,13 +1,32 @@
 package studentcourse
 
-import "github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
+import (
+	"encoding/hex"
+	"slices"
 
-func UpdateAssignment(tx *cardano.Tx) bool {
+	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
+)
 
-	// Check if (the input datum is constructor 1 && the output datum is constructor 1)
+func UpdateAssignment(tx *cardano.Tx, courseStatePolicyIds []string) bool {
+	var oldContent string
+	var updatedContent string
 
-	// Placeholder implementation
-	return false
+	// TODO: Check if courseStateToken is in inputs and has datum with constructor 1
 
-	// Check if the assignment Id is changed i.e. decommit from an assignment and commit to another assignment
+	outputs := tx.GetOutputs()
+	for _, output := range outputs {
+		multiassets := output.GetAssets()
+		for _, ma := range multiassets {
+			if slices.Contains(courseStatePolicyIds, hex.EncodeToString(ma.GetPolicyId())) {
+				datum := output.GetDatum().GetPayload()
+				// Check if constructor 1
+				if datum.GetConstr().GetTag() == 122 {
+					content := datum.GetConstr().GetFields()[1].GetBoundedBytes()
+					updatedContent = hex.EncodeToString(content)
+				}
+			}
+		}
+	}
+
+	return oldContent != updatedContent
 }
