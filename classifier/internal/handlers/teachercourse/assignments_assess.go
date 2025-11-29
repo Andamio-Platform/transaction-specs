@@ -46,6 +46,11 @@ func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePoli
 		}
 	}
 
+	if userToken == "" || courseStateToken == "" {
+		fmt.Println("Required tokens not found in outputs.")
+		return false
+	}
+
 	// Then Check Datum structure for the input token and the output token
 	// Input datum is export type Committed = ConStr1<[ByteString, ByteString, List<ByteString>]>;
 	// Output datum is export type State = ConStr0<[List<ByteString>]>;
