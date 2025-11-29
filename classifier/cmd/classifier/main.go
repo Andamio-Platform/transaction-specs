@@ -6,9 +6,11 @@ import (
 )
 
 func main() {
-	hashHex := "b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d"
+	hashHex := "7a96d45238788c92143a3bc2aaae2d405c25efe5da1281b2930bd42e717d90fa"
 	tx := utils.GetCardanoTx(hashHex)
 
-	moduleScriptsV2PolicyId := "0881d005d4301748df5aab08fbd302ad62f06a1b6b154664c96b9ba7"
-	teachercourse.ManageModules(tx, moduleScriptsV2PolicyId)
+	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
+	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
+
+	teachercourse.AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds)
 }

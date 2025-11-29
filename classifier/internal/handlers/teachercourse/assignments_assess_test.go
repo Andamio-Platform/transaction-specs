@@ -1,0 +1,26 @@
+package teachercourse
+
+import (
+	"classifier/internal/utils"
+	"testing"
+)
+
+func TestAssessAssignments(t *testing.T) {
+
+	hashHex := "7a96d45238788c92143a3bc2aaae2d405c25efe5da1281b2930bd42e717d90fa"
+	tx := utils.GetCardanoTx(hashHex)
+
+	if tx == nil {
+		t.Fatal("Failed to retrieve transaction")
+	}
+
+	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
+	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
+
+	result := AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds)
+	t.Logf("AssessAssignments result: %v", result)
+
+	if result != true {
+		t.Error(hashHex + " should be classified as AssessAssignments transaction")
+	}
+}
