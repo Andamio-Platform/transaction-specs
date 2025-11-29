@@ -16,9 +16,11 @@ func Mint(tx *cardano.Tx, accessTokenPolicy string) (*models.UserAccessTokenMint
 			for _, asset := range mint.GetAssets() {
 				if asset.MintCoin > 0 {
 					if hex.EncodeToString(mint.GetPolicyId()) == accessTokenPolicy {
+						redeemer := mint.GetRedeemer().GetPayload()
+						alias := string(redeemer.GetBoundedBytes())
 						return &models.UserAccessTokenMint{
 							TxHash: hex.EncodeToString(tx.GetHash()),
-							// TODO: Extract other fields
+							Alias:  alias,
 						}, true
 					}
 				}
