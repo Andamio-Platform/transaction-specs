@@ -3,7 +3,7 @@ package studentcourse
 import (
 	"testing"
 
-	"github.com/andamio-platform/transaction-specs/blob/main/classifier/utils"
+	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
 func TestClaimCredential(t *testing.T) {

@@ -3,7 +3,7 @@ package teachercourse
 import (
 	"testing"
 
-	"github.com/andamio-platform/transaction-specs/blob/main/classifier/utils"
+	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
 func TestManageModules(t *testing.T) {

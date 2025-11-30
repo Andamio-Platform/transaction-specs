@@ -3,7 +3,7 @@ package useraccesstoken
 import (
 	"testing"
 
-	"github.com/andamio-platform/transaction-specs/blob/main/classifier/utils"
+	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
 func TestMint(t *testing.T) {

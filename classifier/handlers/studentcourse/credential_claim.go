@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"slices"
 
-	"github.com/andamio-platform/transaction-specs/blob/main/classifier/models"
+	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
