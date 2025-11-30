@@ -5,18 +5,18 @@ This project is a transaction classifier for the Andamio Platform, built in Go. 
 ## Project Structure
 
 - `cmd/classifier/main.go`: The entry point of the application. It iterates through a list of transaction hashes, fetches the transaction data, and runs it through various classifiers.
-- `internal/handlers`: Contains the classifier logic, organized by domain:
+- `handlers`: Contains the classifier logic, organized by domain:
     - `admincourse`: Handlers for admin-related course actions (create course, update teachers).
     - `studentcourse`: Handlers for student-related actions (enroll, submit assignment, etc.).
     - `teachercourse`: Handlers for teacher-related actions (manage modules, assess assignments).
     - `useraccesstoken`: Handlers for minting user access tokens.
-- `internal/models`: Defines the data structures (structs) for the extracted transaction data.
-- `internal/utils`: Shared utility functions (e.g., fetching transactions).
+- `models`: Defines the data structures (structs) for the extracted transaction data.
+- `utils`: Shared utility functions (e.g., fetching transactions).
 
 ## How to Extend
 
-1.  **Define a Model**: If you are adding a new transaction type, define a struct in `internal/models/models.go` to represent the data you want to extract.
-2.  **Create a Handler**: Create a new function in the appropriate `internal/handlers` package.
+1.  **Define a Model**: If you are adding a new transaction type, define a struct in `models/models.go` to represent the data you want to extract.
+2.  **Create a Handler**: Create a new function in the appropriate `handlers` package.
     - The function should accept `*cardano.Tx`.
     - It should return `(*models.YourModel, bool)`.
     - Use `config.Get()` to access necessary configuration values (e.g., policy IDs).
