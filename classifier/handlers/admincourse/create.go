@@ -11,7 +11,7 @@ import (
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 )
 
-func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernanceTokenPolicy string, instanceStakingCredential string, network constants.Network) (*models.AdminCourseCreate, bool) {
+func CreateCourse(tx *cardano.Tx, localStateReferencePolicy string, courseGovernanceV2Policy string, instanceStakingScriptHash string, network constants.Network) (*models.AdminCourseCreate, bool) {
 	isInitCourse := false
 
 	requiredAssets := map[string]bool{
@@ -38,7 +38,7 @@ func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernan
 
 	if len(mints) > 0 {
 		for _, mint := range mints {
-			if hex.EncodeToString(mint.GetPolicyId()) == localStateTokenPolicy {
+			if hex.EncodeToString(mint.GetPolicyId()) == localStateReferencePolicy {
 				assets := mint.GetAssets()
 				for _, asset := range assets {
 					assetName := string(asset.GetName())
@@ -50,7 +50,7 @@ func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernan
 				}
 			}
 
-			if hex.EncodeToString(mint.GetPolicyId()) == instanceGovernanceTokenPolicy {
+			if hex.EncodeToString(mint.GetPolicyId()) == courseGovernanceV2Policy {
 				requiredAssets["InstanceGovernanceToken"] = true
 			}
 		}
@@ -79,7 +79,7 @@ func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernan
 				for _, asset := range assets.GetAssets() {
 					assetPolicyId := hex.EncodeToString(assets.GetPolicyId())
 					assetName := string(asset.GetName())
-					if assetPolicyId == localStateTokenPolicy && assetName == "LocalStateToken" {
+					if assetPolicyId == localStateReferencePolicy && assetName == "LocalStateToken" {
 						courseStateScript = output.GetScript()
 						datum := output.GetDatum().GetPayload()
 						courseID = hex.EncodeToString(datum.GetBoundedBytes())
@@ -88,7 +88,7 @@ func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernan
 						datum := output.GetDatum().GetPayload()
 						admin = string(datum.GetBoundedBytes())
 					}
-					if assetPolicyId == instanceGovernanceTokenPolicy {
+					if assetPolicyId == courseGovernanceV2Policy {
 						datum := output.GetDatum().GetPayload()
 						teachersPlutusData := datum.GetArray().GetItems()
 						for _, teacherPlutusData := range teachersPlutusData {
@@ -106,7 +106,7 @@ func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernan
 		if err != nil {
 			fmt.Println("Error computing hash:", err)
 		}
-		stakingCredential, err := hex.DecodeString(instanceStakingCredential)
+		stakingCredential, err := hex.DecodeString(instanceStakingScriptHash)
 		if err != nil {
 			fmt.Println("Error decoding staking credential:", err)
 		}

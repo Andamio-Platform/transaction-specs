@@ -38,8 +38,8 @@ func main() {
 
 	// Policies
 	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
-	localStateTokenPolicy := "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a"
-	instanceGovernanceTokenPolicy := "60e72e5ee056545fcb37f2d3f9b853daede356516ab5c80f886a652a"
+	localStateReferencePolicy := "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a"
+	courseGovernanceV2Policy := "60e72e5ee056545fcb37f2d3f9b853daede356516ab5c80f886a652a"
 	courseStatePolicyIds := []string{
 		"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0",
 	}
@@ -63,7 +63,7 @@ func main() {
 		}
 
 		// ===== AdminCourse =====
-		if model, ok := admincourse.CreateCourse(tx, localStateTokenPolicy, instanceGovernanceTokenPolicy, instanceStakingCredential, network); ok {
+		if model, ok := admincourse.CreateCourse(tx, localStateReferencePolicy, courseGovernanceV2Policy, instanceStakingCredential, network); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("AdminCourse → CREATE_COURSE\n%s", string(jsonBytes)))
 		}
