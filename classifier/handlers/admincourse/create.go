@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/Salvionied/apollo/constants"
-	"github.com/andamio-platform/transaction-specs/classifier/plutusData"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/plutusData"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 
-	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/models"
 )
 
 func CreateCourse(tx *cardano.Tx, localStateTokenPolicy string, instanceGovernanceTokenPolicy string, instanceStakingCredential string, network constants.Network) (*models.AdminCourseCreate, bool) {

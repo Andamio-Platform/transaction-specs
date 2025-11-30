@@ -1,4 +1,4 @@
-module github.com/andamio-platform/transaction-specs/classifier
+module github.com/andamio-platform/transaction-specs/blob/main/classifier
 
 go 1.25.2
 

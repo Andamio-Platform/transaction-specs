@@ -5,7 +5,7 @@ import (
 
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 
-	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/models"
 )
 
 func Mint(tx *cardano.Tx, accessTokenPolicy string) (*models.UserAccessTokenMint, bool) {

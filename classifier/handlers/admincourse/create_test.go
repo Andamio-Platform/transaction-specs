@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/Salvionied/apollo/constants"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/utils"
 )
 
 func TestCreateCourse(t *testing.T) {

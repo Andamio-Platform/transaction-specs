@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/Salvionied/apollo/constants"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/admincourse"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/studentcourse"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/teachercourse"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/handlers/useraccesstoken"
-	"github.com/andamio-platform/transaction-specs/classifier/internal/utils"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/handlers/admincourse"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/handlers/studentcourse"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/handlers/teachercourse"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/handlers/useraccesstoken"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/utils"
 )
 
 func main() {

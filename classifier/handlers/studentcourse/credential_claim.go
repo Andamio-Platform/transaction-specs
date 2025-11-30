@@ -4,20 +4,28 @@ import (
 	"encoding/hex"
 	"slices"
 
-	"github.com/andamio-platform/transaction-specs/classifier/internal/models"
+	"github.com/andamio-platform/transaction-specs/blob/main/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseEnroll, bool) {
+func ClaimCredential(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseCredentialClaim, bool) {
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {
 		for _, mint := range mints {
 			for _, asset := range mint.GetAssets() {
-				if asset.MintCoin == 1 {
+				if asset.MintCoin == -1 {
 					if slices.Contains(courseStatePolicyIds, hex.EncodeToString(mint.GetPolicyId())) {
 
-						alias := string(asset.GetName())
+						redeemer := mint.GetRedeemer().GetPayload()
+
+						alias := string(redeemer.GetConstr().GetFields()[0].GetBoundedBytes())
+
+						var credentials []string
+						credentialsPlutusData := redeemer.GetConstr().GetFields()[1].GetArray().GetItems()
+						for _, credentialPlutusData := range credentialsPlutusData {
+							credentials = append(credentials, hex.EncodeToString(credentialPlutusData.GetBoundedBytes()))
+						}
 
 						var courseID string
 						referenceInputs := tx.GetReferenceInputs()
@@ -33,11 +41,11 @@ func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCours
 								}
 							}
 						}
-
-						return &models.StudentCourseEnroll{
-							TxHash:   hex.EncodeToString(tx.GetHash()),
-							Alias:    alias,
-							CourseID: courseID,
+						return &models.StudentCourseCredentialClaim{
+							TxHash:      hex.EncodeToString(tx.GetHash()),
+							Alias:       alias,
+							CourseID:    courseID,
+							Credentials: credentials,
 						}, true
 					}
 				}
