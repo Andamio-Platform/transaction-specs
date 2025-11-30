@@ -4,11 +4,13 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func SubmitAssignment(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseAssignmentSubmit, bool) {
+func SubmitAssignment(tx *cardano.Tx) (*models.StudentCourseAssignmentSubmit, bool) {
+	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 
 	// TODO: Check if courseStateToken is minted (OR) input courseStateToken has datum with constructor 0
 

@@ -3,21 +3,25 @@ package studentcourse
 import (
 	"testing"
 
+	"github.com/Salvionied/apollo/constants"
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
 func TestSubmitAssignment(t *testing.T) {
 
-	hashHex := "863e38af684c603900a3297ed726ddd1f8def8dce68180a73e2267a4f69cf104"
+	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
+	config.Init(constants.PREPROD)
+	config.SetCourseStatePolicyIds(courseStatePolicyIds)
+
+	hashHex := "92d4ba99124b11aef75e4b2dd36e91b6e5b81e383c496836b6bdf3d9daf8dad2"
 	tx := utils.GetCardanoTx(hashHex)
 
 	if tx == nil {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
-
-	_, ok := SubmitAssignment(tx, courseStatePolicyIds)
+	_, ok := SubmitAssignment(tx)
 	t.Logf("SubmitAssignment result: %v", ok)
 
 	if !ok {

@@ -3,6 +3,8 @@ package teachercourse
 import (
 	"testing"
 
+	"github.com/Salvionied/apollo/constants"
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
@@ -15,10 +17,11 @@ func TestAssessAssignments(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
 	courseStatePolicyIds := []string{"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0"}
+	config.Init(constants.PREPROD)
+	config.SetCourseStatePolicyIds(courseStatePolicyIds)
 
-	_, ok := AssessAssignments(tx, accessTokenPolicy, courseStatePolicyIds)
+	_, ok := AssessAssignments(tx)
 	t.Logf("AssessAssignments result: %v", ok)
 
 	if !ok {

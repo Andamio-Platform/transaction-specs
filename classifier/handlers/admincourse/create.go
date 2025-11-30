@@ -4,15 +4,20 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/Salvionied/apollo/constants"
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/plutusData"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 )
 
-func CreateCourse(tx *cardano.Tx, localStateReferencePolicy string, courseGovernanceV2Policy string, instanceStakingScriptHash string, network constants.Network) (*models.AdminCourseCreate, bool) {
+func CreateCourse(tx *cardano.Tx) (*models.AdminCourseCreate, bool) {
 	isInitCourse := false
+
+	localStateReferencePolicy := config.Get().CurrentV2().LocalStateRef.MSCPolicyID
+	courseGovernanceV2Policy := config.Get().CurrentV2().CourseGovernanceV2.MSCPolicyID
+	instanceStakingScriptHash := config.Get().CurrentV2().InstanceStakingScrSh
+	network := config.Get().Network
 
 	requiredAssets := map[string]bool{
 		// "LocalStateNFT":           false,	// TODO

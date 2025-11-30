@@ -1,0 +1,100 @@
+{
+    "courseGovernanceV2": {
+        "mSCAddress": "addr_test1xpswwtj7upt9gh7txled87dc20dwmc6k294ttjq03p4x225ey3l3jfdh9fjp5r36meser0d70vlrls0agh62ur622jmqtt05jv",
+        "mSCPolicyID": "60e72e5ee056545fcb37f2d3f9b853daede356516ab5c80f886a652a",
+        "mSCTxRef": "fc92ebcf115d39914192a816020cd47ce89253209a05f0f30e6bd9f926d11aee#3"
+    },
+    "dbPath": "/home/adrian/andamio/andamio-atlas-api/preprod/db",
+    "feeConfiguration": {
+        "course": {
+            "addCourseCreators": {
+                "serviceFee": 5000000
+            },
+            "initCourse": {
+                "serviceFee": 25000000
+            }
+        },
+        "project": {
+            "admin": {
+                "addProjectCreators": {
+                    "serviceFee": 5000000
+                },
+                "initProjectStep1": {
+                    "serviceFee": 25000000
+                }
+            },
+            "contributor": {
+                "getRewards": {
+                    "serviceFee": {
+                        "min": 1000000,
+                        "percentage": [
+                            {
+                                "fee": 3.0e-2,
+                                "tier": "free"
+                            },
+                            {
+                                "fee": 1.5e-2,
+                                "tier": "premium"
+                            },
+                            {
+                                "fee": 1.25e-2,
+                                "tier": "partner"
+                            },
+                            {
+                                "fee": 1.0e-2,
+                                "tier": "enterprise"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "receiverAddress": "addr_test1qpuptlg3kgtcq0rq8rq0z7w8pp0j7p98whvsg4wp6c0mngu7nalltfu076ak2qfw0p2ghn5svge4pm78gpfr6rl8rtrszh0nq3"
+    },
+    "feeConfiguration'": null,
+    "globalStateV2S": {
+        "sCAddress": "addr_test1xzklyz29dtcmeed2fer9x4y7z205h5l8ng4n57trw6fgdu3wgsna4f55vq42rfstp7wl7r0wxflwdmezp8jpf9w83gnsm4xa2p",
+        "sCTxRef": "1937336fdedcd62c377c898494e98bec611b5673c7621aad6e8a79e536b9609a#1"
+    },
+    "indexAdmin'": "c462dc5f0fd723747cd40f02def85fd4a1c4a697e3c844342176ef43.496e64657841646d696e",
+    "indexMS": {
+        "mSCAddress": "addr_test1xqum9pmty3vt3nvxn6mxtvj8gr0k3yrgfglxe4llds5tsjewgsna4f55vq42rfstp7wl7r0wxflwdmezp8jpf9w83gnsrr84hd",
+        "mSCPolicyID": "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b",
+        "mSCTxRef": "35d93ccfe17ccd6de427c66818f19eb79d729b7abd825be02441a70dfd769aff#0"
+    },
+    "indexRefMS": {
+        "mSCAddress": "addr_test1xzypklpsq0v7urakszm5gngwehewre59weyqysn3xnnm6m3wgsna4f55vq42rfstp7wl7r0wxflwdmezp8jpf9w83gns8wlk3z",
+        "mSCPolicyID": "16142d07540b0f1f417f0c0a88b6761b91c12fe4d81a29dc15bc782f",
+        "mSCTxRef": "35d93ccfe17ccd6de427c66818f19eb79d729b7abd825be02441a70dfd769aff#1"
+    },
+    "indexStakingSh": "2e4427daa694602aa1a60b0f9dff0dee327ee6ef2209e41495c78a27",
+    "initIndexPolId'": "d5da72fc8ce4f996ca2a7a706ada4c097bdd0a14f20ef7389e69eaab",
+    "instanceAdmin'": "130388131f7d9d17a986c454c64cea44aea63b66d30bccd4629df733.496e7374616e636541646d696e",
+    "instanceGovernanceV2": {
+        "sCAddress": "addr_test1xzlrs55we4u7speyteuqdnw7tl7u4npzm9p2j5l9lgfu32uey3l3jfdh9fjp5r36meser0d70vlrls0agh62ur622jmqtucd7n",
+        "sCTxRef": "35d93ccfe17ccd6de427c66818f19eb79d729b7abd825be02441a70dfd769aff#3"
+    },
+    "instanceProvidedV2MS": {
+        "mSCAddress": "addr_test1xqegsrf2ea2v4u7mt7rpx37ty9qndg8ljkjzkwk8lypxaa5ey3l3jfdh9fjp5r36meser0d70vlrls0agh62ur622jmq0rufu0",
+        "mSCPolicyID": "32880d2acf54caf3db5f861347cb214136a0ff95a42b3ac7f9026ef6",
+        "mSCTxRef": "1937336fdedcd62c377c898494e98bec611b5673c7621aad6e8a79e536b9609a#3"
+    },
+    "instanceStakingScrSh": "99247f1925b72a641a0e3ade6191bdbe7b3e3fc1fd45f4ae0f4a54b6",
+    "instanceV2MS": {
+        "mSCAddress": "addr_test1xz67809tfezxkep75zz8zdvun7p984uj28seccvfd8tw36vey3l3jfdh9fjp5r36meser0d70vlrls0agh62ur622jmqmw8pc6",
+        "mSCPolicyID": "b5e3bcab4e446b643ea08471359c9f8253d79251e19c618969d6e8e9",
+        "mSCTxRef": "1937336fdedcd62c377c898494e98bec611b5673c7621aad6e8a79e536b9609a#2"
+    },
+    "localStateRef": {
+        "mSCAddress": "addr_test1xqd5m8p22gl4qshnkxyvahlq02k7uy23usvt74ugr8wykk3wgsna4f55vq42rfstp7wl7r0wxflwdmezp8jpf9w83gnspgzxfx",
+        "mSCPolicyID": "1b4d9c2a523f5042f3b188cedfe07aadee1151e418bf578819dc4b5a",
+        "mSCTxRef": "35d93ccfe17ccd6de427c66818f19eb79d729b7abd825be02441a70dfd769aff#4"
+    },
+    "moduleScriptsV2": {
+        "mSCAddress": "addr_test1xqygr5q96scpwjxlt24s377nq2kk9ur2rd4323nye94ehfuey3l3jfdh9fjp5r36meser0d70vlrls0agh62ur622jmq5egxwn",
+        "mSCPolicyID": "0881d005d4301748df5aab08fbd302ad62f06a1b6b154664c96b9ba7",
+        "mSCTxRef": "1937336fdedcd62c377c898494e98bec611b5673c7621aad6e8a79e536b9609a#4"
+    },
+    "referenceAddr": "addr_test1qqae6e6pu0cg9mjf842f6rjc0j0044a220hsepkjeuy0ua6wf3pnafz8dz9st0svrzr9da7ny58a0urwvq78jxsdzsqskzwmhs",
+    "v2GlobalStateObsTxRef": "35d93ccfe17ccd6de427c66818f19eb79d729b7abd825be02441a70dfd769aff#2"
+}

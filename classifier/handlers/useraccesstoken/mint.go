@@ -3,12 +3,13 @@ package useraccesstoken
 import (
 	"encoding/hex"
 
-	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
-
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
+	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Mint(tx *cardano.Tx, accessTokenPolicy string) (*models.UserAccessTokenMint, bool) {
+func Mint(tx *cardano.Tx) (*models.UserAccessTokenMint, bool) {
+	accessTokenPolicy := config.Get().CurrentV2().IndexMS.MSCPolicyID
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {

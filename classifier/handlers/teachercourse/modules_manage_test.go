@@ -3,11 +3,14 @@ package teachercourse
 import (
 	"testing"
 
+	"github.com/Salvionied/apollo/constants"
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/utils"
 )
 
 func TestManageModules(t *testing.T) {
-	accessTokenPolicy := "39b2876b2458b8cd869eb665b24740df6890684a3e6cd7ff6c28b84b"
+	config.Init(constants.PREPROD)
+	config.SetCourseStatePolicyIds([]string{})
 
 	hashHex := "b5eaffde5f818310567881b7c14d9e071a29b0c20cefbc73cec3f350da9aac3d"
 	tx := utils.GetCardanoTx(hashHex)
@@ -16,9 +19,7 @@ func TestManageModules(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	moduleScriptsV2PolicyId := "0881d005d4301748df5aab08fbd302ad62f06a1b6b154664c96b9ba7"
-
-	_, ok := ManageModules(tx, moduleScriptsV2PolicyId, accessTokenPolicy)
+	_, ok := ManageModules(tx)
 	t.Logf("ManageModules result: %v", ok)
 
 	if !ok {

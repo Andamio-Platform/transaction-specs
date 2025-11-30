@@ -5,11 +5,14 @@ import (
 	"fmt"
 
 	"github.com/Salvionied/apollo/serialization/PlutusData"
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ManageModules(tx *cardano.Tx, moduleScriptsV2PolicyId string, accessTokenPolicy string) (*models.TeacherCourseModulesManage, bool) {
+func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
+	moduleScriptsV2PolicyId := config.Get().CurrentV2().ModuleScriptsV2.MSCPolicyID
+	accessTokenPolicy := config.Get().CurrentV2().IndexMS.MSCPolicyID
 
 	referenceInputs := tx.GetReferenceInputs()
 	for _, refInput := range referenceInputs {

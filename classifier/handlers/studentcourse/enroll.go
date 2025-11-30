@@ -4,11 +4,13 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Enroll(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseEnroll, bool) {
+func Enroll(tx *cardano.Tx) (*models.StudentCourseEnroll, bool) {
+	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {

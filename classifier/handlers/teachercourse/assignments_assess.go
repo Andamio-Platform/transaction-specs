@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func AssessAssignments(tx *cardano.Tx, accessTokenPolicy string, courseStatePolicyIds []string) (*models.TeacherCourseAssignmentsAssess, bool) {
+func AssessAssignments(tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, bool) {
+	accessTokenPolicy := config.Get().CurrentV2().IndexMS.MSCPolicyID
+	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 
 	type Decision string
 

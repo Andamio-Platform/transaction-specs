@@ -4,11 +4,13 @@ import (
 	"encoding/hex"
 	"slices"
 
+	"github.com/andamio-platform/transaction-specs/classifier/config"
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ClaimCredential(tx *cardano.Tx, courseStatePolicyIds []string) (*models.StudentCourseCredentialClaim, bool) {
+func ClaimCredential(tx *cardano.Tx) (*models.StudentCourseCredentialClaim, bool) {
+	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {
