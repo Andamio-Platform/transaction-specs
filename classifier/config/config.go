@@ -64,9 +64,31 @@ func load(network constants.Network) *Config {
 	}
 }
 
-func (c *Config) CurrentV2() V2ConfigStruct {
+type Seed struct {
+	BlockSlot uint64
+	BlockHash string
+}
+
+type V2ConfigWithSeed struct {
+	V2ConfigStruct // embedded — brings all fields of V2ConfigStruct directly
+	Seed           Seed
+}
+
+func (c *Config) CurrentV2() V2ConfigWithSeed {
 	if c.Network == constants.MAINNET {
-		return c.V2.Mainnet
+		return V2ConfigWithSeed{
+			V2ConfigStruct: c.V2.Mainnet,
+			Seed: Seed{
+				BlockSlot: 0,
+				BlockHash: "",
+			},
+		}
 	}
-	return c.V2.Preprod
+	return V2ConfigWithSeed{
+		V2ConfigStruct: c.V2.Preprod,
+		Seed: Seed{
+			BlockSlot: 107466420,
+			BlockHash: "76bc905e0c90761540a5bf504c2a9463ad075eed6284cb06540f4e1092f959c6",
+		},
+	}
 }
