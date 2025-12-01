@@ -1,30 +1,7 @@
 package models
 
-import (
-	"database/sql/driver"
-	"encoding/json"
-)
-
 // StringArray is a custom type for storing string arrays in PostgreSQL
 type StringArray []string
-
-// Value implements the driver.Valuer interface
-func (a StringArray) Value() (driver.Value, error) {
-	return json.Marshal(a)
-}
-
-// Scan implements the sql.Scanner interface
-func (a *StringArray) Scan(value interface{}) error {
-	if value == nil {
-		*a = []string{}
-		return nil
-	}
-	bytes, ok := value.([]byte)
-	if !ok {
-		return nil
-	}
-	return json.Unmarshal(bytes, &a)
-}
 
 // AdminCourseCreate - /admin/course/create
 type AdminCourseCreate struct {
@@ -76,7 +53,6 @@ type StudentCourseCredentialClaim struct {
 	Credentials StringArray `gorm:"type:jsonb" json:"credentials"`
 }
 
-// TeacherCourseModulesManage - /teacher/course/modules/manage
 // TeacherCourseModulesManage - /teacher/course/modules/manage
 type TeacherCourseModulesManage struct {
 	TxHash   string  `gorm:"primaryKey" json:"txHash"`
