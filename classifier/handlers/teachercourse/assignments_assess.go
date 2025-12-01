@@ -14,21 +14,14 @@ func AssessAssignments(tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, 
 	accessTokenPolicy := config.Get().CurrentV2().IndexMS.MSCPolicyID
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 
-	type Decision string
-
-	const (
-		Accept Decision = "accept"
-		Refuse Decision = "refuse"
-	)
-
-	var decision Decision = ""
-
 	// Check outputs has one of the courseStatePolicyIds
 	// Check if user (u) token is different with course state token
 	var userToken string
-	var courseStateToken string
-
-	var courseStateTokenOutput *cardano.TxOutput
+	type Assessment struct {
+		CourseStateToken       string
+		CourseStateTokenOutput *cardano.TxOutput
+	}
+	var assessments []Assessment
 
 	outputs := tx.GetOutputs()
 	for _, output := range outputs {
@@ -42,15 +35,17 @@ func AssessAssignments(tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, 
 				asset := multiasset.GetAssets()
 				for _, asset := range asset {
 					if asset.GetMintCoin() == 0 && asset.GetOutputCoin() == 1 {
-						courseStateToken = string(asset.GetName())
-						courseStateTokenOutput = output
+						assessments = append(assessments, Assessment{
+							CourseStateToken:       string(asset.GetName()),
+							CourseStateTokenOutput: output,
+						})
 					}
 				}
 			}
 		}
 	}
 
-	if userToken == "" || courseStateToken == "" {
+	if userToken == "" || len(assessments) == 0 {
 		return nil, false
 	}
 
@@ -58,37 +53,46 @@ func AssessAssignments(tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, 
 	// Input datum is export type Committed = ConStr1<[ByteString, ByteString, List<ByteString>]>;
 	// Output datum is export type State = ConStr0<[List<ByteString>]>;
 
-	if userToken[1:] != courseStateToken {
-		datum := courseStateTokenOutput.GetDatum().GetPayload()
+	var results []models.Assessment
 
-		constr := datum.GetConstr()
-		if constr == nil {
-			return nil, false
-		}
+	for _, assessment := range assessments {
+		if userToken[1:] != assessment.CourseStateToken {
+			datum := assessment.CourseStateTokenOutput.GetDatum().GetPayload()
 
-		switch constr.GetTag() {
-		case 121:
-			decision = Accept
-			println(decision)
-			if handleAccept(constr) {
-				return &models.TeacherCourseAssignmentsAssess{
-					TxHash: hex.EncodeToString(tx.GetHash()),
-					// TODO: Extract other fields
-				}, true
+			constr := datum.GetConstr()
+			if constr == nil {
+				return nil, false
 			}
-		case 122:
-			decision = Refuse
-			println(decision)
-			if handleRefuse(constr) {
-				return &models.TeacherCourseAssignmentsAssess{
-					TxHash: hex.EncodeToString(tx.GetHash()),
-					// TODO: Extract other fields
-				}, true
-			}
-		default:
-			return nil, false
-		}
 
+			switch constr.GetTag() {
+			case 121:
+				if handleAccept(constr) {
+					results = append(results, models.Assessment{
+						StudentAlias: assessment.CourseStateToken,
+						Assessment:   models.Accept,
+					})
+				}
+			case 122:
+				if handleRefuse(constr) {
+					results = append(results, models.Assessment{
+						StudentAlias: assessment.CourseStateToken,
+						Assessment:   models.Refuse,
+					})
+				}
+			default:
+				return nil, false
+			}
+		}
+	}
+
+	if len(results) > 0 {
+		return &models.TeacherCourseAssignmentsAssess{
+			TxHash:       hex.EncodeToString(tx.GetHash()),
+			Alias:        userToken[1:],
+			CourseID:     "",
+			AssignmentID: "",
+			Assessments:  results,
+		}, true
 	}
 
 	return nil, false

@@ -54,7 +54,7 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 				}
 			}
 
-			var createSlts []models.ModuleCreate
+			var modulesCreated []models.ModulesCreated
 			mints := tx.GetMint()
 			for _, mint := range mints {
 				if hex.EncodeToString(mint.GetPolicyId()) == moduleScriptsV2PolicyId {
@@ -63,6 +63,7 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 						var slts models.StringArray
 						var prerequisites models.StringArray = models.StringArray{}
 						if asset.GetMintCoin() > 0 {
+							assignmentID := hex.EncodeToString(asset.GetName())
 							redeemer := mint.GetRedeemer().GetPayload()
 							modules := redeemer.GetConstr().GetFields()[2].GetArray().GetItems()
 							sltsPlutusData := modules[0].GetArray().GetItems()
@@ -75,9 +76,12 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 									prerequisites = append(prerequisites, string(prerequisitePlutusData.GetBoundedBytes()))
 								}
 							}
-							createSlts = append(createSlts, models.ModuleCreate{
-								SLTs:          slts,
-								Prerequisites: prerequisites,
+							modulesCreated = append(modulesCreated, models.ModulesCreated{
+								AssignmentID: assignmentID,
+								Module: models.ModuleCreate{
+									SLTs:          slts,
+									Prerequisites: prerequisites,
+								},
 							})
 						}
 					}
@@ -89,28 +93,9 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 				Alias:    alias,
 				CourseID: courseID,
 				Modules: models.Modules{
-					Create: []models.ModulesCreated{
-						{
-							AssignmentID: "gg",
-							Module: models.ModuleCreate{
-								SLTs:          models.StringArray{"gg"},
-								Prerequisites: models.StringArray{"gg"},
-							},
-						},
-					},
-					Update: []models.ModulesUpdated{
-						{
-							AssignmentID: "gg",
-							Module: models.ModuleUpdate{
-								Prerequisites: models.StringArray{"gg"},
-							},
-						},
-					},
-					Delete: []models.ModulesDeleted{
-						{
-							AssignmentID: "gg",
-						},
-					},
+					Create: modulesCreated,
+					Update: []models.ModulesUpdated{}, // TODO: Implement
+					Delete: []models.ModulesDeleted{}, // TODO: Implement
 				},
 			}, true
 		}

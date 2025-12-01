@@ -124,9 +124,16 @@ type TeacherCourseAssignmentsAssess struct {
 }
 
 type Assessment struct {
-	StudentAlias string `json:"studentAlias"`
-	Assessment   string `json:"assessment"`
+	StudentAlias string   `json:"studentAlias"`
+	Assessment   Decision `json:"assessment"`
 }
+
+type Decision string
+
+const (
+	Accept Decision = "accept"
+	Refuse Decision = "refuse"
+)
 
 // UserAccessTokenMint - /user/access-token/mint
 type UserAccessTokenMint struct {
