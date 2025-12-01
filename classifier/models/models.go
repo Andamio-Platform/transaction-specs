@@ -47,10 +47,11 @@ type StudentCourseAssignmentUpdate struct {
 
 // StudentCourseCredentialClaim - /student/course/credential/claim
 type StudentCourseCredentialClaim struct {
-	TxHash      string      `gorm:"primaryKey" json:"txHash"`
-	Alias       string      `json:"alias"`
-	CourseID    string      `json:"courseId"`
-	Credentials StringArray `gorm:"type:jsonb" json:"credentials"`
+	TxHash       string      `gorm:"primaryKey" json:"txHash"`
+	Alias        string      `gorm:"uniqueIndex:idx_alias_course_credential;not null" json:"alias"`
+	CourseID     string      `gorm:"uniqueIndex:idx_alias_course_credential;not null" json:"courseId"`
+	CredentialID string      `gorm:"uniqueIndex:idx_alias_course_credential;not null" json:"credentialId" `
+	Credentials  StringArray `gorm:"type:jsonb" json:"credentials"`
 }
 
 // TeacherCourseModulesManage - /teacher/course/modules/manage

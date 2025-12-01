@@ -43,11 +43,33 @@ func ClaimCredential(tx *cardano.Tx) (*models.StudentCourseCredentialClaim, bool
 								}
 							}
 						}
+
+						var credentialID string
+						outputs := tx.GetOutputs()
+						for _, output := range outputs {
+							if output.GetDatum().GetPayload() == nil {
+								continue
+							}
+							multiassets := output.GetAssets()
+							for _, ma := range multiassets {
+								if hex.EncodeToString(ma.GetPolicyId()) == config.Get().CurrentV2().IndexMS.MSCPolicyID {
+									datum := output.GetDatum().GetPayload()
+									credentials := datum.GetConstr().GetFields()[1].GetMap().GetPairs()
+									for _, credential := range credentials {
+										if hex.EncodeToString(credential.GetKey().GetBoundedBytes()) == courseID {
+											credentialID = hex.EncodeToString(credential.GetValue().GetBoundedBytes())
+										}
+									}
+								}
+							}
+						}
+
 						return &models.StudentCourseCredentialClaim{
-							TxHash:      hex.EncodeToString(tx.GetHash()),
-							Alias:       alias,
-							CourseID:    courseID,
-							Credentials: credentials,
+							TxHash:       hex.EncodeToString(tx.GetHash()),
+							Alias:        alias,
+							CourseID:     courseID,
+							CredentialID: credentialID,
+							Credentials:  credentials,
 						}, true
 					}
 				}

@@ -64,6 +64,8 @@
 {
     "alias": "string",
     "courseId": "string",
+    "credentialId": "string",
+    "credentials": ["string"]
 }
 ```
 
