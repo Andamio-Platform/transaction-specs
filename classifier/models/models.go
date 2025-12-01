@@ -92,12 +92,14 @@ type ModuleUpdate struct {
 
 // TeacherCourseAssignmentsAssess - /teacher/course/assignments/assess
 type TeacherCourseAssignmentsAssess struct {
-	TxHash       string       `gorm:"primaryKey" json:"txHash"`
-	Alias        string       `json:"alias"`
-	CourseID     string       `json:"courseId"`
-	AssignmentID string       `json:"assignmentId"`
-	Assessments  []Assessment `gorm:"type:jsonb" json:"assessments"`
+	TxHash       string          `gorm:"primaryKey" json:"txHash"`
+	Alias        string          `json:"alias"`
+	CourseID     string          `json:"courseId"`
+	AssignmentID string          `json:"assignmentId"`
+	Assessments  AssessmentArray `gorm:"type:jsonb" json:"assessments"`
 }
+
+type AssessmentArray []Assessment
 
 type Assessment struct {
 	StudentAlias string   `json:"studentAlias"`

@@ -41,9 +41,7 @@ func (m *Modules) Scan(value interface{}) error {
 	return json.Unmarshal(bytes, m)
 }
 
-// For jsonb column storing []Assessment
-type AssessmentArray []Assessment
-
+// For jsonb column storing AssessmentArray
 func (a AssessmentArray) Value() (driver.Value, error) {
 	return json.Marshal(a)
 }
