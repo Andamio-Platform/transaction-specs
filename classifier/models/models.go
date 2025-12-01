@@ -77,6 +77,7 @@ type StudentCourseCredentialClaim struct {
 }
 
 // TeacherCourseModulesManage - /teacher/course/modules/manage
+// TeacherCourseModulesManage - /teacher/course/modules/manage
 type TeacherCourseModulesManage struct {
 	TxHash   string  `gorm:"primaryKey" json:"txHash"`
 	Alias    string  `json:"alias"`
@@ -85,9 +86,23 @@ type TeacherCourseModulesManage struct {
 }
 
 type Modules struct {
-	Create []ModuleCreate `json:"create"`
-	Update []ModuleUpdate `json:"update"`
-	Delete StringArray    `json:"delete"`
+	Create []ModulesCreated `json:"create"`
+	Update []ModulesUpdated `json:"update"`
+	Delete []ModulesDeleted `json:"delete"`
+}
+
+type ModulesCreated struct {
+	AssignmentID string       `json:"assignmentId"`
+	Module       ModuleCreate `json:"module"`
+}
+
+type ModulesUpdated struct {
+	AssignmentID string       `json:"assignmentId"`
+	Module       ModuleUpdate `json:"module"`
+}
+
+type ModulesDeleted struct {
+	AssignmentID string `json:"assignmentId"`
 }
 
 type ModuleCreate struct {
@@ -96,17 +111,21 @@ type ModuleCreate struct {
 }
 
 type ModuleUpdate struct {
-	SLTHash       string      `json:"sltHash"`
 	Prerequisites StringArray `json:"prerequisites"`
 }
 
 // TeacherCourseAssignmentsAssess - /teacher/course/assignments/assess
 type TeacherCourseAssignmentsAssess struct {
-	TxHash       string `gorm:"primaryKey" json:"txHash"`
-	Alias        string `json:"alias"`
-	CourseID     string `json:"courseId"`
-	AssignmentID string `json:"assignmentId"`
-	Assessments  string `gorm:"type:jsonb" json:"assessments"` // Stores assessment array as JSON
+	TxHash       string       `gorm:"primaryKey" json:"txHash"`
+	Alias        string       `json:"alias"`
+	CourseID     string       `json:"courseId"`
+	AssignmentID string       `json:"assignmentId"`
+	Assessments  []Assessment `gorm:"type:jsonb" json:"assessments"`
+}
+
+type Assessment struct {
+	StudentAlias string `json:"studentAlias"`
+	Assessment   string `json:"assessment"`
 }
 
 // UserAccessTokenMint - /user/access-token/mint

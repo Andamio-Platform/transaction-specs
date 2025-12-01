@@ -77,18 +77,27 @@
     "courseId": "string",
     "modules": {
         "create": [
-        {
-            "slts": ["string"],
-            "prerequisites": ["string"],
-        }
-    ],
+            {
+                "assignmentId" : "string",
+                "module":{
+                    "slts": ["string"],
+                    "prerequisites": ["string"],
+                }
+            }
+        ],
         "update": [
-        {
-            "sltHash": "string",
-            "prerequisites": ["string"],
-        }
-    ],
-        "delete": ["string"]
+            {
+                "assignmentId" : "string",
+                "module":{
+                    "prerequisites": ["string"],
+                }
+            }
+        ],
+        "delete": [
+            {
+                "assignmentId" : "string"
+            }
+        ]
     }
 }
 ```

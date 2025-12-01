@@ -89,14 +89,28 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 				Alias:    alias,
 				CourseID: courseID,
 				Modules: models.Modules{
-					Create: createSlts,
-					Update: []models.ModuleUpdate{
+					Create: []models.ModulesCreated{
 						{
-							SLTHash:       "gg",
-							Prerequisites: models.StringArray{"gg"},
+							AssignmentID: "gg",
+							Module: models.ModuleCreate{
+								SLTs:          models.StringArray{"gg"},
+								Prerequisites: models.StringArray{"gg"},
+							},
 						},
 					},
-					Delete: models.StringArray{"gg"},
+					Update: []models.ModulesUpdated{
+						{
+							AssignmentID: "gg",
+							Module: models.ModuleUpdate{
+								Prerequisites: models.StringArray{"gg"},
+							},
+						},
+					},
+					Delete: []models.ModulesDeleted{
+						{
+							AssignmentID: "gg",
+						},
+					},
 				},
 			}, true
 		}
