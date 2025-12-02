@@ -17,7 +17,7 @@ components:
         items:
           type: string
     changeAddressParam:
-      name: changeAddress
+      name: change_address
       in: query
       description: 'Change address for multi-address Cardano wallets (required when addresses is provided)'
       required: false
@@ -56,10 +56,10 @@ components:
     AssessmentItem:
       type: object
       required:
-        - studentAlias
+        - student_alias
         - assessment
       properties:
-        studentAlias:
+        student_alias:
           type: string
           description: 'Student Access Token Alias'
           minLength: 1
@@ -70,10 +70,10 @@ components:
             - accept
             - refuse
 paths:
-  /admin/course/create:
+  /course/admin/course/create:
     get:
       tags:
-        - admin course
+        - course/admin
       description: 'Create a course.'
       parameters:
         - name: alias
@@ -90,27 +90,15 @@ paths:
             type: array
             items:
               type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  /student/course/enroll:
+  /course/student/course/enroll:
     get:
       tags:
-        - student course
+        - course/student
       description: 'Join a course.'
       parameters:
         - name: alias
@@ -119,13 +107,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: assignmentId
+        - name: assignment_id
           in: query
           description: 'Assignment ID for first assignment submission'
           required: false
@@ -137,76 +125,15 @@ paths:
           required: false
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  # /teacher/course/modules/create:
-  #   post:
-  #     tags:
-  #       - teacher course
-  #     description: 'Create new course modules with Student Learning Targets and prerequisites.'
-  #     parameters:
-  #       - name: alias
-  #         in: query
-  #         description: 'Access Token Alias of Teacher'
-  #         required: true
-  #         schema:
-  #           type: string
-  #           minLength: 1
-  #       - name: courseId
-  #         in: query
-  #         description: 'Course ID'
-  #         required: true
-  #         schema:
-  #           type: string
-  #           minLength: 1
-  #       - $ref: '#/components/parameters/addressesParam'
-  #       - $ref: '#/components/parameters/changeAddressParam'
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             required:
-  #               - modules
-  #             properties:
-  #               modules:
-  #                 type: array
-  #                 description: 'Modules to be created'
-  #                 items:
-  #                   $ref: '#/components/schemas/ModuleItem'
-  #           example:
-  #             modules:
-  #               - slts:
-  #                   - 'I can test 1'
-  #                   - 'I can test 2'
-  #                 prerequisites:
-  #                   - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
-  #               - slts:
-  #                   - 'I can implement'
-  #                 prerequisites: []
-  #     responses:
-  #       '200':
-  #         description: OK
-  /teacher/course/modules/manage:
+  /course/teacher/modules/manage:
     post:
       tags:
-        - teacher course
+        - course/teacher
       description: 'Create, update, or delete course modules in batch.'
       parameters:
         - name: alias
@@ -216,7 +143,7 @@ paths:
           schema:
             type: string
             minLength: 1
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
@@ -267,10 +194,10 @@ paths:
       responses:
         '200':
           description: OK
-  /student/course/assignment/submit:
+  /course/student/assignment/submit:
     get:
       tags:
-        - student course
+        - course/student
       description: 'Submit assignment.'
       parameters:
         - name: alias
@@ -279,13 +206,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: assignmentId
+        - name: assignment_id
           in: query
           description: 'Assignment ID'
           required: true
@@ -297,27 +224,15 @@ paths:
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  /teacher/course/assignment/assess:
+  /course/teacher/assignment/assess:
     get:
       tags:
-        - teacher course
+        - course/teacher
       description: 'Assess an assignment.'
       parameters:
         - name: alias
@@ -326,13 +241,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: studentAlias
+        - name: student_alias
           in: query
           description: 'Student Alias'
           required: true
@@ -347,27 +262,15 @@ paths:
             enum:
               - accept
               - refuse
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  /teacher/course/assignments/assess:
+  /course/teacher/assignments/assess:
     post:
       tags:
-        - teacher course
+        - course/teacher
       description: 'Assess multiple student assignments in batch (accept or refuse).'
       parameters:
         - name: alias
@@ -377,7 +280,7 @@ paths:
           schema:
             type: string
             minLength: 1
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
@@ -402,17 +305,17 @@ paths:
                     $ref: '#/components/schemas/AssessmentItem'
             example:
               assessments:
-                - studentAlias: 'student-1'
+                - student_alias: 'student-1'
                   assessment: 'accept'
-                - studentAlias: 'student-2'
+                - student_alias: 'student-2'
                   assessment: 'refuse'
       responses:
         '200':
           description: OK
-  /student/course/assignment/update:
+  /course/student/assignment/update:
     get:
       tags:
-        - student course
+        - course/student
       description: 'Update an assignment.'
       parameters:
         - name: alias
@@ -421,13 +324,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: assignmentId
+        - name: assignment_id
           in: query
           description: 'New Assignment ID (Withdraw current assignment)'
           required: false
@@ -439,27 +342,15 @@ paths:
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  /student/course/credential/claim:
+  /course/student/credential/claim:
     get:
       tags:
-        - student course
+        - course/student
       description: 'Complete a course.'
       parameters:
         - name: alias
@@ -468,33 +359,21 @@ paths:
           required: true
           schema:
             type: string
-        - name: courseId
+        - name: course_id
           in: query
           description: 'Course ID'
           required: true
           schema:
             type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
-  /admin/course/teachers/update:
+  /course/admin/teachers/update:
     get:
       tags:
-        - admin course
+        - course/admin
       description: 'Update course teachers.'
       parameters:
         - name: alias
@@ -519,20 +398,8 @@ paths:
             type: array
             items:
               type: string
-        - name: addresses
-          in: query
-          description: 'Used addresses for multi address cardano wallets'
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: changeAddress
-          in: query
-          description: 'Change address for multi address cardano wallets'
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
