@@ -9,7 +9,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func SubmitAssignment(tx *cardano.Tx) (*models.StudentCourseAssignmentSubmit, bool) {
+func SubmitAssignment(cfg *config.Config, tx *cardano.Tx) (*models.StudentCourseAssignmentSubmit, bool) {
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 
 	// TODO: Check if courseStateToken is minted (OR) input courseStateToken has datum with constructor 0

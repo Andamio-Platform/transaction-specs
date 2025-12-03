@@ -19,7 +19,7 @@ func TestManageModules(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	_, ok := ManageModules(tx)
+	_, ok := ManageModules(config.Get(), tx)
 	t.Logf("ManageModules result: %v", ok)
 
 	if !ok {

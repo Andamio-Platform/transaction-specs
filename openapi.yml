@@ -70,6 +70,11 @@ components:
             - accept
             - refuse
 paths:
+
+##############################################
+# Course Admin Endpoints
+##############################################
+
   /course/admin/course/create:
     get:
       tags:
@@ -95,41 +100,45 @@ paths:
       responses:
         '200':
           description: OK
-  /course/student/course/enroll:
+
+  /course/admin/teachers/update:
     get:
       tags:
-        - course/student
-      description: 'Join a course.'
+        - course/admin
+      description: 'Update course teachers.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Student'
+          description: 'Access Token Alias of course admin'
           required: true
           schema:
             type: string
-        - name: course_id
+        - name: add
           in: query
-          description: 'Course ID'
+          description: 'List of manager Access Token Aliases'
           required: true
           schema:
-            type: string
-        - name: assignment_id
+            type: array
+            items:
+              type: string
+        - name: remove
           in: query
-          description: 'Assignment ID for first assignment submission'
-          required: false
+          description: 'List of manager Access Token Aliases'
+          required: true
           schema:
-            type: string
-        - name: content
-          in: query
-          description: 'Assignment Content Hash for first assignment submission'
-          required: false
-          schema:
-            type: string
+            type: array
+            items:
+              type: string
         - $ref: '#/components/parameters/addressesParam'
         - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
           description: OK
+
+##############################################
+# Course Teacher Endpoints
+##############################################
+
   /course/teacher/modules/manage:
     post:
       tags:
@@ -194,79 +203,7 @@ paths:
       responses:
         '200':
           description: OK
-  /course/student/assignment/submit:
-    get:
-      tags:
-        - course/student
-      description: 'Submit assignment.'
-      parameters:
-        - name: alias
-          in: query
-          description: 'Access Token Alias of Student'
-          required: true
-          schema:
-            type: string
-        - name: course_id
-          in: query
-          description: 'Course ID'
-          required: true
-          schema:
-            type: string
-        - name: assignment_id
-          in: query
-          description: 'Assignment ID'
-          required: true
-          schema:
-            type: string
-        - name: content
-          in: query
-          description: 'Assignment Content Hash'
-          required: true
-          schema:
-            type: string
-        - $ref: '#/components/parameters/addressesParam'
-        - $ref: '#/components/parameters/changeAddressParam'
-      responses:
-        '200':
-          description: OK
-  /course/teacher/assignment/assess:
-    get:
-      tags:
-        - course/teacher
-      description: 'Assess an assignment.'
-      parameters:
-        - name: alias
-          in: query
-          description: 'Access Token Alias of Teacher'
-          required: true
-          schema:
-            type: string
-        - name: course_id
-          in: query
-          description: 'Course ID'
-          required: true
-          schema:
-            type: string
-        - name: student_alias
-          in: query
-          description: 'Student Alias'
-          required: true
-          schema:
-            type: string
-        - name: assessment
-          in: query
-          description: 'Assessment Result'
-          required: true
-          schema:
-            type: string
-            enum:
-              - accept
-              - refuse
-        - $ref: '#/components/parameters/addressesParam'
-        - $ref: '#/components/parameters/changeAddressParam'
-      responses:
-        '200':
-          description: OK
+
   /course/teacher/assignments/assess:
     post:
       tags:
@@ -312,11 +249,15 @@ paths:
       responses:
         '200':
           description: OK
-  /course/student/assignment/update:
+##############################################
+# Course Student Endpoints
+##############################################
+
+  /course/student/course/enroll:
     get:
       tags:
         - course/student
-      description: 'Update an assignment.'
+      description: 'Join a course.'
       parameters:
         - name: alias
           in: query
@@ -332,14 +273,14 @@ paths:
             type: string
         - name: assignment_id
           in: query
-          description: 'New Assignment ID (Withdraw current assignment)'
+          description: 'Assignment ID for first assignment submission'
           required: false
           schema:
             type: string
         - name: content
           in: query
-          description: 'Assignment Content Hash'
-          required: true
+          description: 'Assignment Content Hash for first assignment submission'
+          required: false
           schema:
             type: string
         - $ref: '#/components/parameters/addressesParam'
@@ -347,6 +288,64 @@ paths:
       responses:
         '200':
           description: OK
+
+  /course/student/assignment/action:
+    get:
+      tags:
+        - course/student
+      description: 'Perform an assignment action (submit or update).'
+      parameters:
+        - name: action
+          in: path
+          description: 'Action to perform on the assignment. Either `submit` or `update`.'
+          required: true
+          schema:
+            type: string
+            enum: [submit, update]
+
+        - name: alias
+          in: query
+          description: 'Access Token Alias of Student'
+          required: true
+          schema:
+            type: string
+
+        - name: course_id
+          in: query
+          description: 'Course ID'
+          required: true
+          schema:
+            type: string
+
+        - name: assignment_id
+          in: query
+          description: 'Assignment ID (required for both submit and update)'
+          required: true
+          schema:
+            type: string
+
+        - name: new_assignment_id
+          in: query
+          description: 'New Assignment ID (Withdraw from current commitment and submit to a new assignment)'
+          required: false
+          schema:
+            type: string
+
+        - name: content
+          in: query
+          description: 'Assignment Content Hash'
+          required: true
+          schema:
+            type: string
+
+        - $ref: '#/components/parameters/addressesParam'
+        - $ref: '#/components/parameters/changeAddressParam'
+
+      responses:
+        '200':
+          description: OK
+
+
   /course/student/credential/claim:
     get:
       tags:
@@ -365,39 +364,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: '#/components/parameters/addressesParam'
-        - $ref: '#/components/parameters/changeAddressParam'
-      responses:
-        '200':
-          description: OK
-  /course/admin/teachers/update:
-    get:
-      tags:
-        - course/admin
-      description: 'Update course teachers.'
-      parameters:
-        - name: alias
-          in: query
-          description: 'Access Token Alias of course admin'
-          required: true
-          schema:
-            type: string
-        - name: add
-          in: query
-          description: 'List of manager Access Token Aliases'
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-        - name: remove
-          in: query
-          description: 'List of manager Access Token Aliases'
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
         - $ref: '#/components/parameters/addressesParam'
         - $ref: '#/components/parameters/changeAddressParam'
       responses:

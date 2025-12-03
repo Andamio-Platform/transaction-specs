@@ -8,8 +8,8 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Mint(tx *cardano.Tx) (*models.UserAccessTokenMint, bool) {
-	accessTokenPolicy := config.Get().CurrentV2().IndexMS.MSCPolicyID
+func Mint(cfg *config.Config, tx *cardano.Tx) (*models.UserAccessTokenMint, bool) {
+	accessTokenPolicy := cfg.CurrentV2().IndexMS.MSCPolicyID
 	mints := tx.GetMint()
 
 	if len(mints) > 0 {

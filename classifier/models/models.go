@@ -3,6 +3,20 @@ package models
 // StringArray is a custom type for storing string arrays in PostgreSQL
 type StringArray []string
 
+type TransactionType string
+
+const (
+	TxTypeUserAccessTokenMint            TransactionType = "UserAccessTokenMint"
+	TxTypeAdminCourseCreate              TransactionType = "AdminCourseCreate"
+	TxTypeAdminCourseTeachersUpdate      TransactionType = "AdminCourseTeachersUpdate"
+	TxTypeStudentCourseEnroll            TransactionType = "StudentCourseEnroll"
+	TxTypeStudentCourseAssignmentSubmit  TransactionType = "StudentCourseAssignmentSubmit"
+	TxTypeStudentCourseAssignmentUpdate  TransactionType = "StudentCourseAssignmentUpdate"
+	TxTypeStudentCourseCredentialClaim   TransactionType = "StudentCourseCredentialClaim"
+	TxTypeTeacherCourseAssignmentsAssess TransactionType = "TeacherCourseAssignmentsAssess"
+	TxTypeTeacherCourseModulesManage     TransactionType = "TeacherCourseModulesManage"
+)
+
 // AdminCourseCreate - /admin/course/create
 type AdminCourseCreate struct {
 	TxHash              string      `gorm:"primaryKey" json:"txHash"`

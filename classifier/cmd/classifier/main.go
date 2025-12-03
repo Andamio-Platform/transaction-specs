@@ -41,6 +41,8 @@ func main() {
 	config.Init(network)
 	config.SetCourseStatePolicyIds(courseStatePolicyIds)
 
+	cfg := config.Get()
+
 	for _, hash := range txHashes {
 		fmt.Println("Processing transaction:", hash)
 
@@ -53,45 +55,45 @@ func main() {
 		var matched []string
 
 		// ===== UserAccessToken =====
-		if model, ok := useraccesstoken.Mint(tx); ok {
+		if model, ok := useraccesstoken.Mint(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("UserAccessToken → MINT\n%s", string(jsonBytes)))
 		}
 
 		// ===== AdminCourse =====
-		if model, ok := admincourse.CreateCourse(tx); ok {
+		if model, ok := admincourse.CreateCourse(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("AdminCourse → CREATE_COURSE\n%s", string(jsonBytes)))
 		}
-		if model, ok := admincourse.UpdateTeachers(tx); ok {
+		if model, ok := admincourse.UpdateTeachers(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("AdminCourse → UPDATE_TEACHERS\n%s", string(jsonBytes)))
 		}
 
 		// ===== TeacherCourse =====
-		if model, ok := teachercourse.AssessAssignments(tx); ok {
+		if model, ok := teachercourse.AssessAssignments(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("TeacherCourse → ASSESS_ASSIGNMENTS\n%s", string(jsonBytes)))
 		}
-		if model, ok := teachercourse.ManageModules(tx); ok {
+		if model, ok := teachercourse.ManageModules(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("TeacherCourse → MANAGE_MODULES\n%s", string(jsonBytes)))
 		}
 
 		// ===== StudentCourse =====
-		if model, ok := studentcourse.Enroll(tx); ok {
+		if model, ok := studentcourse.Enroll(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("StudentCourse → ENROLL\n%s", string(jsonBytes)))
 		}
-		if model, ok := studentcourse.SubmitAssignment(tx); ok {
+		if model, ok := studentcourse.SubmitAssignment(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("StudentCourse → SUBMIT_ASSIGNMENT\n%s", string(jsonBytes)))
 		}
-		if model, ok := studentcourse.UpdateAssignment(tx); ok {
+		if model, ok := studentcourse.UpdateAssignment(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("StudentCourse → UPDATE_ASSIGNMENT\n%s", string(jsonBytes)))
 		}
-		if model, ok := studentcourse.ClaimCredential(tx); ok {
+		if model, ok := studentcourse.ClaimCredential(cfg, tx); ok {
 			jsonBytes, _ := json.MarshalIndent(model, "", "  ")
 			matched = append(matched, fmt.Sprintf("StudentCourse → CLAIM_CREDENTIAL\n%s", string(jsonBytes)))
 		}

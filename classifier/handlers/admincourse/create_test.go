@@ -44,7 +44,7 @@ func TestCreateCourse(t *testing.T) {
 	// I will assume the config file has these values or I might need to overwrite them in the test.
 	// Since I cannot overwrite easily, I will just call Init.
 
-	_, ok := CreateCourse(tx)
+	_, ok := CreateCourse(config.Get(), tx)
 	t.Logf("CreateCourse result: %v", ok)
 
 	if !ok {

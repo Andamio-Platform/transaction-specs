@@ -9,7 +9,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ClaimCredential(tx *cardano.Tx) (*models.StudentCourseCredentialClaim, bool) {
+func ClaimCredential(cfg *config.Config, tx *cardano.Tx) (*models.StudentCourseCredentialClaim, bool) {
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 	mints := tx.GetMint()
 
@@ -52,7 +52,7 @@ func ClaimCredential(tx *cardano.Tx) (*models.StudentCourseCredentialClaim, bool
 							}
 							multiassets := output.GetAssets()
 							for _, ma := range multiassets {
-								if hex.EncodeToString(ma.GetPolicyId()) == config.Get().CurrentV2().IndexMS.MSCPolicyID {
+								if hex.EncodeToString(ma.GetPolicyId()) == cfg.CurrentV2().IndexMS.MSCPolicyID {
 									datum := output.GetDatum().GetPayload()
 									credentials := datum.GetConstr().GetFields()[1].GetMap().GetPairs()
 									for _, credential := range credentials {

@@ -21,7 +21,7 @@ func TestAssessAssignments(t *testing.T) {
 	config.Init(constants.PREPROD)
 	config.SetCourseStatePolicyIds(courseStatePolicyIds)
 
-	_, ok := AssessAssignments(tx)
+	_, ok := AssessAssignments(config.Get(), tx)
 	t.Logf("AssessAssignments result: %v", ok)
 
 	if !ok {

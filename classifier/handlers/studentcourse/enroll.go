@@ -9,7 +9,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Enroll(tx *cardano.Tx) (*models.StudentCourseEnroll, bool) {
+func Enroll(cfg *config.Config, tx *cardano.Tx) (*models.StudentCourseEnroll, bool) {
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 	mints := tx.GetMint()
 

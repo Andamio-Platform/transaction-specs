@@ -11,13 +11,13 @@ import (
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 )
 
-func CreateCourse(tx *cardano.Tx) (*models.AdminCourseCreate, bool) {
+func CreateCourse(cfg *config.Config, tx *cardano.Tx) (*models.AdminCourseCreate, bool) {
 	isInitCourse := false
 
-	localStateReferencePolicy := config.Get().CurrentV2().LocalStateRef.MSCPolicyID
-	courseGovernanceV2Policy := config.Get().CurrentV2().CourseGovernanceV2.MSCPolicyID
-	instanceStakingScriptHash := config.Get().CurrentV2().InstanceStakingScrSh
-	network := config.Get().Network
+	localStateReferencePolicy := cfg.CurrentV2().LocalStateRef.MSCPolicyID
+	courseGovernanceV2Policy := cfg.CurrentV2().CourseGovernanceV2.MSCPolicyID
+	instanceStakingScriptHash := cfg.CurrentV2().InstanceStakingScrSh
+	network := cfg.Network
 
 	requiredAssets := map[string]bool{
 		// "LocalStateNFT":           false,	// TODO
