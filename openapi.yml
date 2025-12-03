@@ -2,15 +2,16 @@ openapi: '3.0.3'
 info:
   title: Andamio Transactions API
   version: '2.0.0'
-  description: 'API for managing Andamio course transactions on Cardano'
+  description: 'API for building unsigned Cardano transactions for Andamio course actions.'
 servers:
   - url: http://localhost:8000/v2
+
 components:
   parameters:
     addressesParam:
       name: addresses
       in: query
-      description: 'Used addresses for multi-address Cardano wallets (optional for single-address wallets)'
+      description: 'Used addresses for multi-address Cardano wallets (optional for single-address wallets).'
       required: false
       schema:
         type: array
@@ -19,11 +20,21 @@ components:
     changeAddressParam:
       name: change_address
       in: query
-      description: 'Change address for multi-address Cardano wallets (required when addresses is provided)'
+      description: 'Change address for multi-address Cardano wallets (required when addresses is provided).'
       required: false
       schema:
         type: string
+
   schemas:
+    TxCBORResponse:
+      type: object
+      required:
+        - cbor
+      properties:
+        cbor:
+          type: string
+          description: 'CBOR-encoded unsigned Cardano transaction in hex format.'
+
     ModuleItem:
       type: object
       required:
@@ -31,15 +42,16 @@ components:
       properties:
         slts:
           type: array
-          description: 'List of Student Learning Targets'
+          description: 'List of Student Learning Targets.'
           items:
             type: string
             minLength: 1
         prerequisites:
           type: array
-          description: 'List of prerequisite assignment hashes'
+          description: 'List of prerequisite assignment hashes.'
           items:
             type: string
+
     ModuleUpdate:
       type: object
       required:
@@ -47,12 +59,13 @@ components:
       properties:
         sltHash:
           type: string
-          description: 'Hash of the Student Learning Target to update'
+          description: 'Hash of the Student Learning Target to update.'
         prerequisites:
           type: array
-          description: 'List of prerequisite assignment hashes'
+          description: 'List of prerequisite assignment hashes.'
           items:
             type: string
+
     AssessmentItem:
       type: object
       required:
@@ -61,35 +74,34 @@ components:
       properties:
         student_alias:
           type: string
-          description: 'Student Access Token Alias'
+          description: 'Student Access Token Alias.'
           minLength: 1
         assessment:
           type: string
-          description: 'Assessment decision'
-          enum:
-            - accept
-            - refuse
+          description: 'Assessment decision.'
+          enum: [accept, refuse]
+
 paths:
 
-##############################################
-# Course Admin Endpoints
-##############################################
+  ##############################################
+  # Course Admin Endpoints
+  ##############################################
 
   /course/admin/course/create:
     get:
-      tags:
-        - course/admin
-      description: 'Create a course.'
+      tags: [course/admin]
+      operationId: buildAdminCourseCreateTx
+      description: 'Build transaction to create a course.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of course owner'
+          description: 'Access Token Alias of course owner.'
           required: true
           schema:
             type: string
         - name: teachers
           in: query
-          description: 'List of teacher Access Token Aliases'
+          description: 'List of teacher Access Token Aliases.'
           required: true
           schema:
             type: array
@@ -99,23 +111,29 @@ paths:
         - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
-          description: OK
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
+              example:
+                cbor: '84a50081825820f...'
 
   /course/admin/teachers/update:
     get:
-      tags:
-        - course/admin
-      description: 'Update course teachers.'
+      tags: [course/admin]
+      operationId: buildAdminTeachersUpdateTx
+      description: 'Build transaction to update course teachers.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of course admin'
+          description: 'Access Token Alias of course admin.'
           required: true
           schema:
             type: string
         - name: add
           in: query
-          description: 'List of manager Access Token Aliases'
+          description: 'List of teacher Access Token Aliases to add.'
           required: true
           schema:
             type: array
@@ -123,7 +141,7 @@ paths:
               type: string
         - name: remove
           in: query
-          description: 'List of manager Access Token Aliases'
+          description: 'List of teacher Access Token Aliases to remove.'
           required: true
           schema:
             type: array
@@ -133,32 +151,34 @@ paths:
         - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
-          description: OK
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
 
-##############################################
-# Course Teacher Endpoints
-##############################################
+  ##############################################
+  # Course Teacher Endpoints
+  ##############################################
 
   /course/teacher/modules/manage:
     post:
-      tags:
-        - course/teacher
-      description: 'Create, update, or delete course modules in batch.'
+      tags: [course/teacher]
+      operationId: buildTeacherModulesManageTx
+      description: 'Build transaction to create, update, or delete course modules in batch.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Teacher'
+          description: 'Access Token Alias of Teacher.'
           required: true
           schema:
             type: string
-            minLength: 1
         - name: course_id
           in: query
-          description: 'Course ID'
+          description: 'Course ID.'
           required: true
           schema:
             type: string
-            minLength: 1
         - $ref: '#/components/parameters/addressesParam'
         - $ref: '#/components/parameters/changeAddressParam'
       requestBody:
@@ -170,29 +190,26 @@ paths:
               properties:
                 create:
                   type: array
-                  description: 'Modules to be created'
+                  description: 'Modules to be created.'
                   items:
                     $ref: '#/components/schemas/ModuleItem'
                 update:
                   type: array
-                  description: 'Modules to be updated'
+                  description: 'Modules to be updated.'
                   items:
                     $ref: '#/components/schemas/ModuleUpdate'
                 delete:
                   type: array
-                  description: 'Modules to be deleted (module hashes)'
+                  description: 'Modules to be deleted (module hashes).'
                   items:
                     type: string
-                    description: 'Hash of the Student Learning Target to delete'
+                    description: 'Hash of the Student Learning Target to delete.'
             example:
               create:
-                - slts:
-                    - 'I can test 1'
-                    - 'I can test 2'
+                - slts: ['I can test 1', 'I can test 2']
                   prerequisites:
                     - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
-                - slts:
-                    - 'I can implement'
+                - slts: ['I can implement']
                   prerequisites: []
               update:
                 - sltHash: 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
@@ -202,28 +219,30 @@ paths:
                 - 'c8bc55db03d6ead9311272b7c73637e6999f8306574321f009d7053eaa98cf7b'
       responses:
         '200':
-          description: OK
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
 
   /course/teacher/assignments/assess:
     post:
-      tags:
-        - course/teacher
-      description: 'Assess multiple student assignments in batch (accept or refuse).'
+      tags: [course/teacher]
+      operationId: buildTeacherAssignmentsAssessTx
+      description: 'Build transaction to assess multiple student assignments (accept or refuse) in batch.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Teacher'
+          description: 'Access Token Alias of Teacher.'
           required: true
           schema:
             type: string
-            minLength: 1
         - name: course_id
           in: query
-          description: 'Course ID'
+          description: 'Course ID.'
           required: true
           schema:
             type: string
-            minLength: 1
         - $ref: '#/components/parameters/addressesParam'
         - $ref: '#/components/parameters/changeAddressParam'
       requestBody:
@@ -232,12 +251,11 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - assessments
+              required: [assessments]
               properties:
                 assessments:
                   type: array
-                  description: 'List of assessments to process'
+                  description: 'List of assessments to process.'
                   items:
                     $ref: '#/components/schemas/AssessmentItem'
             example:
@@ -248,38 +266,43 @@ paths:
                   assessment: 'refuse'
       responses:
         '200':
-          description: OK
-##############################################
-# Course Student Endpoints
-##############################################
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
+
+  ##############################################
+  # Course Student Endpoints
+  ##############################################
 
   /course/student/course/enroll:
     get:
-      tags:
-        - course/student
-      description: 'Join a course.'
+      tags: [course/student]
+      operationId: buildStudentCourseEnrollTx
+      description: 'Build transaction to join a course.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Student'
+          description: 'Access Token Alias of Student.'
           required: true
           schema:
             type: string
         - name: course_id
           in: query
-          description: 'Course ID'
+          description: 'Course ID.'
           required: true
           schema:
             type: string
         - name: assignment_id
           in: query
-          description: 'Assignment ID for first assignment submission'
+          description: 'Assignment ID for first assignment submission.'
           required: false
           schema:
             type: string
         - name: content
           in: query
-          description: 'Assignment Content Hash for first assignment submission'
+          description: 'Assignment Content Hash for first assignment submission.'
           required: false
           schema:
             type: string
@@ -287,13 +310,17 @@ paths:
         - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
-          description: OK
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
 
-  /course/student/assignment/action:
+  /course/student/assignment/{action}:
     get:
-      tags:
-        - course/student
-      description: 'Perform an assignment action (submit or update).'
+      tags: [course/student]
+      operationId: buildStudentAssignmentTx
+      description: 'Build unsigned Cardano transaction for submitting or updating an assignment.'
       parameters:
         - name: action
           in: path
@@ -302,65 +329,63 @@ paths:
           schema:
             type: string
             enum: [submit, update]
-
         - name: alias
           in: query
-          description: 'Access Token Alias of Student'
+          description: 'Access Token Alias of Student.'
           required: true
           schema:
             type: string
-
         - name: course_id
           in: query
-          description: 'Course ID'
+          description: 'Course ID.'
           required: true
           schema:
             type: string
-
         - name: assignment_id
           in: query
-          description: 'Assignment ID (required for both submit and update)'
+          description: 'Assignment ID (required for both submit and update).'
           required: true
           schema:
             type: string
-
         - name: new_assignment_id
           in: query
-          description: 'New Assignment ID (Withdraw from current commitment and submit to a new assignment)'
+          description: 'New Assignment ID (withdraw current commitment and submit to a new assignment).'
           required: false
           schema:
             type: string
-
         - name: content
           in: query
-          description: 'Assignment Content Hash'
+          description: 'Assignment Content Hash.'
           required: true
           schema:
             type: string
-
         - $ref: '#/components/parameters/addressesParam'
         - $ref: '#/components/parameters/changeAddressParam'
-
       responses:
         '200':
-          description: OK
-
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
+              example:
+                cbor: '84a50081825820a0f7e4b8b35f5b71a7b0e3...'
 
   /course/student/credential/claim:
     get:
-      tags:
-        - course/student
-      description: 'Complete a course.'
+      tags: [course/student]
+      operationId: buildStudentCredentialClaimTx
+      description: 'Build transaction to complete a course and claim credentials.'
       parameters:
         - name: alias
           in: query
-          description: 'Access Token Alias of Student'
+          description: 'Access Token Alias of Student.'
           required: true
           schema:
             type: string
         - name: course_id
           in: query
-          description: 'Course ID'
+          description: 'Course ID.'
           required: true
           schema:
             type: string
@@ -368,4 +393,8 @@ paths:
         - $ref: '#/components/parameters/changeAddressParam'
       responses:
         '200':
-          description: OK
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
