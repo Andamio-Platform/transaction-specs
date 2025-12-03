@@ -10,7 +10,8 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func ManageModules(cfg *config.Config, tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
+func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
+	cfg := config.Get()
 	moduleScriptsV2PolicyId := cfg.CurrentV2().ModuleScriptsV2.MSCPolicyID
 	accessTokenPolicy := cfg.CurrentV2().IndexMS.MSCPolicyID
 

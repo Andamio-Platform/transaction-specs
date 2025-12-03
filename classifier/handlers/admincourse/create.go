@@ -11,8 +11,10 @@ import (
 	"github.com/andamio-platform/transaction-specs/classifier/models"
 )
 
-func CreateCourse(cfg *config.Config, tx *cardano.Tx) (*models.AdminCourseCreate, bool) {
+func CreateCourse(tx *cardano.Tx) (*models.AdminCourseCreate, bool) {
 	isInitCourse := false
+
+	cfg := config.Get()
 
 	localStateReferencePolicy := cfg.CurrentV2().LocalStateRef.MSCPolicyID
 	courseGovernanceV2Policy := cfg.CurrentV2().CourseGovernanceV2.MSCPolicyID

@@ -10,7 +10,8 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func AssessAssignments(cfg *config.Config, tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, bool) {
+func AssessAssignments(tx *cardano.Tx) (*models.TeacherCourseAssignmentsAssess, bool) {
+	cfg := config.Get()
 	accessTokenPolicy := cfg.CurrentV2().IndexMS.MSCPolicyID
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 

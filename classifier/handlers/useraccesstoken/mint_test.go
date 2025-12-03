@@ -19,7 +19,7 @@ func TestMint(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	_, ok := Mint(config.Get(), tx)
+	_, ok := Mint(tx)
 	t.Logf("Mint result: %v", ok)
 
 	if !ok {

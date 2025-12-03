@@ -9,7 +9,7 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func UpdateAssignment(cfg *config.Config, tx *cardano.Tx) (*models.StudentCourseAssignmentUpdate, bool) {
+func UpdateAssignment(tx *cardano.Tx) (*models.StudentCourseAssignmentUpdate, bool) {
 	courseStatePolicyIds := config.GetCourseStatePolicyIds()
 	var oldContent string
 	var updatedContent string

@@ -8,7 +8,8 @@ import (
 	"github.com/utxorpc/go-codegen/utxorpc/v1alpha/cardano"
 )
 
-func Mint(cfg *config.Config, tx *cardano.Tx) (*models.UserAccessTokenMint, bool) {
+func Mint(tx *cardano.Tx) (*models.UserAccessTokenMint, bool) {
+	cfg := config.Get()
 	accessTokenPolicy := cfg.CurrentV2().IndexMS.MSCPolicyID
 	mints := tx.GetMint()
 

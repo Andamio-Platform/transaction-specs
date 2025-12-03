@@ -21,7 +21,7 @@ func TestSubmitAssignment(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	_, ok := SubmitAssignment(config.Get(), tx)
+	_, ok := SubmitAssignment(tx)
 	t.Logf("SubmitAssignment result: %v", ok)
 
 	if !ok {

@@ -21,7 +21,7 @@ func TestClaimCredential(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	_, ok := ClaimCredential(config.Get(), tx)
+	_, ok := ClaimCredential(tx)
 	t.Logf("ClaimCredential result: %v", ok)
 
 	if !ok {

@@ -21,7 +21,7 @@ func TestEnroll(t *testing.T) {
 		t.Fatal("Failed to retrieve transaction")
 	}
 
-	_, ok := Enroll(config.Get(), tx)
+	_, ok := Enroll(tx)
 	t.Logf("Enroll result: %v", ok)
 
 	if !ok {
