@@ -83,6 +83,35 @@ components:
 
 paths:
 
+  /general/user/access-token/mint:
+    get:
+      tags: [general/user]
+      operationId: buildUserAccessTokenMintTx
+      description: 'Build unsigned Cardano transaction to mint a new user access token.'
+      parameters:
+        - name: address
+          in: query
+          description: 'Cardano address to receive the minted access token.'
+          required: true
+          schema:
+            type: string
+        - name: alias
+          in: query
+          description: 'Alias for the new user access token.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Returns CBOR-encoded unsigned transaction for signing.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TxCBORResponse'
+              example:
+                cbor: '84a500818258206f1c7e5c0e9f18b4...'
+
+
   ##############################################
   # Course Admin Endpoints
   ##############################################
