@@ -85,6 +85,7 @@ type Modules struct {
 type ModulesCreated struct {
 	AssignmentID string       `json:"assignmentId"`
 	Module       ModuleCreate `json:"module"`
+	CreatedBy    string       `json:"createdBy"`
 }
 
 type ModulesUpdated struct {

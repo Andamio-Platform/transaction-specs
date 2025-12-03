@@ -62,9 +62,11 @@ func ManageModules(cfg *config.Config, tx *cardano.Tx) (*models.TeacherCourseMod
 					for _, asset := range assets {
 						var slts models.StringArray
 						var prerequisites models.StringArray = models.StringArray{}
+						var createdBy string
 						if asset.GetMintCoin() > 0 {
 							assignmentID := hex.EncodeToString(asset.GetName())
 							redeemer := mint.GetRedeemer().GetPayload()
+							createdBy = string(redeemer.GetConstr().GetFields()[0].GetBoundedBytes())
 							modules := redeemer.GetConstr().GetFields()[2].GetArray().GetItems()
 							sltsPlutusData := modules[0].GetArray().GetItems()
 							for _, sltPlutusData := range sltsPlutusData {
@@ -82,6 +84,7 @@ func ManageModules(cfg *config.Config, tx *cardano.Tx) (*models.TeacherCourseMod
 									SLTs:          slts,
 									Prerequisites: prerequisites,
 								},
+								CreatedBy: createdBy,
 							})
 						}
 					}
