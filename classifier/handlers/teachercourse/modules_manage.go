@@ -55,7 +55,7 @@ func ManageModules(tx *cardano.Tx) (*models.TeacherCourseModulesManage, bool) {
 				}
 			}
 
-			var modulesCreated []models.ModulesCreated
+			modulesCreated := []models.ModulesCreated{}
 			mints := tx.GetMint()
 			for _, mint := range mints {
 				if hex.EncodeToString(mint.GetPolicyId()) == moduleScriptsV2PolicyId {
