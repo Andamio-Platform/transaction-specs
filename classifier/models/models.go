@@ -29,9 +29,10 @@ type AdminCourseCreate struct {
 
 // AdminCourseTeachersUpdate - /admin/course/teachers/update
 type AdminCourseTeachersUpdate struct {
-	TxHash   string `gorm:"primaryKey" json:"txHash"`
-	CourseID string `json:"courseId"`
-	Teachers string `gorm:"type:jsonb" json:"teachers"` // Stores add/remove operations as JSON
+	TxHash   string      `gorm:"primaryKey" json:"txHash"`
+	CourseID string      `json:"courseId"`
+	Add      StringArray `gorm:"type:jsonb" json:"add"` // Stores add/remove operations as JSON
+	Remove   StringArray `gorm:"type:jsonb" json:"remove"`
 }
 
 // StudentCourseEnroll - /student/course/enroll

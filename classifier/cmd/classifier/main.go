@@ -30,13 +30,16 @@ func main() {
 		// "80fac6d6516429700728e1a4883eac3f19eea46fc1ebf2810dd01359c9e346fe", // UserAccessToken → MINT
 		// "863e38af684c603900a3297ed726ddd1f8def8dce68180a73e2267a4f69cf104", // StudentCourse → ENROLL , StudentCourse → SUBMIT_ASSIGNMENT
 		// "1b5063ba14cacd6debaf6f4654a44711b22ea6d46482d94d8fa5e01dc02edb36", // TeacherCourse → ASSESS_ASSIGNMENTS
-		"75dcebcd0e768f93d6156dd174e072e1f281fa97ff3a47790fc7f198898dfdea", // StudentCourse → CLAIM_CREDENTIAL
+		// "75dcebcd0e768f93d6156dd174e072e1f281fa97ff3a47790fc7f198898dfdea", // StudentCourse → CLAIM_CREDENTIAL
 		// "64b0b7fe30a6e34ade9bd489e1bdc72ef5495f7c56e9b30154851cf4812a06cc", // AdminCourse → CREATE_COURSE
+		// "b498fea71f795e81715ddbe03313ec93f3992be058340882928dc696289d8c63",
+		"b441be0e9a448cca7ac2944d1b02e6e951372f6715218290ec618bb6c08169f6",
 	}
 
 	network := constants.PREPROD
 	courseStatePolicyIds := []string{
 		"d8475bbfe87cdd18592b8d0c623be1d9be961ed93f75ded26b00e9b0",
+		"43e0b6a044a44d8dd38a37d24584767ea414cdeea8f9e917570b5d17",
 	}
 	config.Init(network)
 	config.SetCourseStatePolicyIds(courseStatePolicyIds)
